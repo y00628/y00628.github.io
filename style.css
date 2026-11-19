@@ -86,3 +86,15 @@ footer { margin-top:56px; padding-top:16px; border-top:1px solid var(--line); co
   .skills { grid-template-columns:repeat(2,1fr); }
 }
 @media (max-width:560px) { .item { grid-template-columns:1fr; } .intro h1 { font-size:2.2rem; } }
+
+/* single-page sections */
+main > section { padding-top: 56px; margin-top: 0; scroll-margin-top: 0; }
+main > section:first-child { padding-top: 0; }
+main > section + section { border-top: 1px solid var(--line); margin-top: 56px; }
+main > section:last-of-type { min-height: 70vh; }
+main > section > h2 { font-size: 1.5rem; text-transform: none; letter-spacing: -.01em; color: var(--fg); font-weight: 700; margin: 0 0 24px; }
+@media (max-width: 860px) {
+  .side { position: sticky; top: 0; z-index: 10; background: var(--bg); }
+  main > section { scroll-margin-top: 110px; }
+  main > section:first-child { scroll-margin-top: 200px; }
+}

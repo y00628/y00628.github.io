@@ -4,18 +4,19 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Yosen Lin</title>
-<meta name="description" content="Yosen Lin: MS ECE at CMU. Systems software, ML systems and computer architecture.">
-<link rel="stylesheet" href="style.css?v=5">
+<meta name="description" content="Yosen Lin: MS ECE at CMU. GPU performance, parallel computing, LLM inference and systems software.">
+<link rel="stylesheet" href="style.css?v=6">
 </head>
 <body>
 <div class="layout">
 <aside class="side">
-<a class="brand" href="index.html">Yosen Lin</a>
+<a class="brand" href="#about">Yosen Lin</a>
 <p class="tagline">M.S. ECE · CMU</p>
-<nav><a href="index.html" class="active">about</a><a href="education.html">education</a><a href="experience.html">experience</a><a href="projects.html">projects</a><a href="runs.html">runs</a></nav>
+<nav><a href="#about" class="active">about</a><a href="#education">education</a><a href="#experience">experience</a><a href="#projects">projects</a><a href="#skills">skills</a><a href="#runs">runs</a></nav>
 </aside>
 <div class="content">
 <main>
+<section id="about">
 <header class="intro">
   <img class="photo" src="photo.jpg" alt="Photo of Yosen Lin" width="88" height="88" onerror="this.remove()">
   <div>
@@ -37,9 +38,265 @@
     </p>
 <p class="links"><a href="mailto:yosenl@andrew.cmu.edu">email</a> <a href="https://github.com/y00628">github</a> <a href="https://linkedin.com/in/yosen-lin">linkedin</a></p>
 
+</section>
+
+  <section id="education">
+    <h2>Education</h2>
+
+    <div class="item">
+      <div class="when">Aug 2025 –<br>May 2027 (expected)</div>
+      <div>
+        <h3>M.S., Electrical &amp; Computer Engineering</h3>
+        <div class="org">Carnegie Mellon University · Pittsburgh, PA</div>
+        <ul>
+          <li>Coursework: Computer Systems, Computer Architecture, Parallel Programming, Machine Learning Systems, FPGA</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="when">Sep 2021 –<br>Mar 2025</div>
+      <div>
+        <h3>B.S., Data Science</h3>
+        <div class="org">University of California, San Diego · San Diego, CA</div>
+        <ul>
+          <li>Coursework: Deep Learning, Optimization, Reinforcement Learning</li>
+          <li>Courses tutored: DSC 40A (4x), DSC 140A, MATH 18</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="experience">
+    <h2>Work &amp; Research</h2>
+
+    <div class="item">
+      <div class="when">Jul – Aug 2026</div>
+      <div>
+        <h3>Software Engineer Intern</h3>
+        <div class="org"><a href="https://www.realtek.com/en/">Realtek Semiconductor Corp.</a> · Hsinchu, Taiwan</div>
+        <ul>
+          <li>Built boot-time profiling and UART log analysis tooling for ARM64 Linux, cutting measurement variance by 85% (6s to 0.9s) to enable automated boot-regression detection.</li>
+          <li>Profiled 800+ kernel initcalls and found Networking and UART/Serial to be the top two contributors to the boot critical path.</li>
+          <li>Built an end-to-end Jenkins/Gerrit CI pipeline with LLM-based patch review plus automated build and boot validation on an ARM64 SoC, reducing the patch-to-boot-result workflow to 2 manual actions.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="when">Jan – May 2026</div>
+      <div>
+        <h3>Graduate Research Assistant</h3>
+        <div class="org"><a href="https://www.cmu.edu/ece/nexus/">NEXUS Research Group, CMU</a> · Pittsburgh, PA</div>
+        <ul>
+          <li>Developed cooperative CUDA kernels with grid-wide synchronization for color-parallel Gibbs sampling on a Blackwell GPU, scaling to 1M+ spins.</li>
+          <li>Isolated sync overhead with barrier-injection linear regression: grid-sync reaches ~25% of sweep time at 10K spins and fades toward the bandwidth-bound limit at 1M+.</li>
+          <li>Showed the workload is memory bound via roofline analysis and Nsight Compute/Systems, contributing the GPU bottleneck decomposition to a cross-platform performance study.</li>
+        </ul>
+      </div>
+    </div>
+
+  </section>
+
+  <section id="projects">
+    <h2>Projects</h2>
+        <div class="projects">
+
+      <article class="card">
+        <div class="date">Nov 2026 – Present · <span class="status wip">In progress</span></div>
+        <h3>Scalable DLRM Inference across GPUs and CPU Memory</h3>
+        <p>Recommendation models have embedding tables too big for a single GPU. This project spreads inference across multiple GPUs and host CPU memory, so models that would normally run out of memory can still be served at scale.</p>
+        <ul class="tags"><li>CUDA</li><li>C++</li><li>Parallel Programming</li></ul>
+        <a href="https://y00628.github.io/dlrm-hetero-inference/">Website →</a> · <a href="https://github.com/y00628/dlrm-hetero-inference">Source →</a>
+      </article>
+
+      <article class="card">
+        <div class="date">Oct 2026 – Present · <span class="status wip">In progress</span></div>
+        <h3>FPGA DRAM Bandwidth Study on the Ultra96-V2</h3>
+        <p>LLM decoding is limited by memory bandwidth, not compute. This project pushes an Ultra96-V2 FPGA toward its DRAM limit on a large fully connected layer and measures what actually moves the needle: memory access settings, clock speed, port configuration and weight precision.</p>
+        <ul class="tags"><li>Vitis HLS</li><li>C++</li><li>FPGA</li></ul>
+      </article>
+
+      <article class="card">
+        <div class="date">Feb 2026 – May 2026 · <span class="status done">Completed</span></div>
+        <h3>DAG Operator Fusion Scheduler</h3>
+        <p>In deep neural networks, shuffling data between fast memory and DRAM often costs more than the math itself. This scheduler decides which operators to fuse and which tensors to keep close, slashing data movement across large DNN graphs.</p>
+        <ul class="tags"><li>C++</li><li>Operator Fusion</li><li>Graph Scheduling</li><li>DNN Dataflow</li></ul>
+        <details>
+          <summary>Details</summary>
+          <ul>
+            <li>Scaled schedule search with graph-cut decomposition, reducing solver wall time by 88% (43s to 5s) with no loss in schedule quality.</li>
+            <li>Fused MatMul&rarr;Pointwise chains with in-situ output activation reuse, keeping intermediates in fast memory and admitting fusion candidates the baseline wrongly pruned.</li>
+            <li>Designed a retain-aware DP that jointly chooses fusion boundaries and which tensors stay resident, contributing ~25% latency reduction on memory-bound benchmarks within a combined 35.8% end-to-end improvement.</li>
+          </ul>
+        </details>
+        <a href="dag-scheduler-poster.pdf">Poster (PDF) →</a> · <a href="https://github.com/y00628/mlsys-dag-scheduler">Source →</a>
+      </article>
+
+      <article class="card">
+        <div class="date">Jan 2026 – Apr 2026 · <span class="status done">Completed</span></div>
+        <h3>Power-Efficient RV32I Pipelined Processor</h3>
+        <p>A 7-stage pipelined RISC-V CPU in SystemVerilog, optimized for both performance and performance-per-watt.</p>
+        <ul class="tags"><li>SystemVerilog</li><li>RTL Design</li><li>C</li></ul>
+        <details>
+          <summary>Details</summary>
+          <ul>
+            <li>Architected the pipeline in RTL with hazard detection, data forwarding and branch resolution.</li>
+            <li>Collaborated on a GShare branch predictor and write-back D-cache, contributing to a 26% geomean IPC improvement.</li>
+            <li>Designed a speculative Return Address Stack, cutting JALR mispredictions on FFT from 99.8% to 35%.</li>
+            <li>Reduced the critical path and tuned the cache for a 45% MIPS/Watt gain and 60% higher clock frequency over baseline.</li>
+          </ul>
+        </details>
+      </article>
+
+      <article class="card">
+        <div class="date">Oct 2025 – Nov 2025 · <span class="status done">Completed</span></div>
+        <h3>Dynamic Memory Allocator</h3>
+        <p>A from-scratch 64-bit <code>malloc</code>/<code>free</code> in C, tuned for memory utilization and throughput.</p>
+        <ul class="tags"><li>C</li><li>GDB</li><li>Memory Management</li></ul>
+        <details>
+          <summary>Details</summary>
+          <ul>
+            <li>Built segregated free lists with best-fit search, reaching 74.5% utilization at 6,705 Kops throughput.</li>
+            <li>Designed 16-byte mini-blocks with bit-packed header metadata, improving utilization by 24% over the implicit-list baseline.</li>
+            <li>Implemented boundary-tag coalescing for adjacent free blocks, plus a runtime heap checker validating alignment, free-list consistency and block invariants.</li>
+          </ul>
+        </details>
+      </article>
+
+    </div>
+  </section>
+
+  <section id="skills">
+    <h2>Skills</h2>
+    <div class="skills">
+
+      <article class="card skill">
+        <h3>Languages</h3>
+        <ul>
+          <li>C</li>
+          <li>C++</li>
+          <li>Python</li>
+          <li>Bash</li>
+        </ul>
+      </article>
+
+      <article class="card skill">
+        <h3>Systems</h3>
+        <ul>
+          <li>Linux Kernel</li>
+          <li>ARM64</li>
+          <li>Multithreading</li>
+          <li>Synchronization</li>
+          <li>Lock-Free Programming</li>
+          <li>Memory Management</li>
+        </ul>
+      </article>
+
+      <article class="card skill">
+        <h3>ML Systems</h3>
+        <ul>
+          <li>PyTorch</li>
+          <li>TensorFlow</li>
+          <li>Operator Fusion</li>
+          <li>Graph Scheduling</li>
+          <li>DNN Dataflow</li>
+        </ul>
+      </article>
+
+      <article class="card skill">
+        <h3>Parallel Programming</h3>
+        <ul>
+          <li>CUDA</li>
+          <li>OpenMP</li>
+          <li>MPI</li>
+          <li>SIMD (ISPC)</li>
+        </ul>
+      </article>
+
+      <article class="card skill">
+        <h3>Profiling &amp; Performance</h3>
+        <ul>
+          <li>Nsight Systems</li>
+          <li>Nsight Compute</li>
+          <li>Linux perf</li>
+          <li>GDB</li>
+          <li>Roofline Analysis</li>
+          <li>Workload Characterization</li>
+          <li>UART Log Analysis</li>
+        </ul>
+      </article>
+
+      <article class="card skill">
+        <h3>Hardware</h3>
+        <ul>
+          <li>RISC-V</li>
+          <li>SystemVerilog</li>
+          <li>RTL Design</li>
+          <li>Vitis HLS</li>
+          <li>Pipelining</li>
+          <li>Caches</li>
+          <li>Memory Hierarchy</li>
+          <li>Branch Prediction</li>
+          <li>Out-of-Order Execution</li>
+        </ul>
+      </article>
+
+      <article class="card skill">
+        <h3>Simulation</h3>
+        <ul>
+          <li>gem5</li>
+          <li>SystemC</li>
+        </ul>
+      </article>
+
+      <article class="card skill">
+        <h3>Build &amp; CI</h3>
+        <ul>
+          <li>Jenkins</li>
+          <li>Gerrit</li>
+          <li>Git</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section id="runs">
+    <h2>Runs Completed</h2>
+    <div class="item">
+      <div class="when">Half marathons</div>
+      <div>
+        <ul>
+          <li>Rock 'n' Roll San Diego Half Marathon, 2024</li>
+          <li>Taipei Marathon (half), 2025</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
 </main>
 <footer>© 2026 Yosen Lin</footer>
 </div>
 </div>
+<script>
+(function () {
+  var links = document.querySelectorAll('nav a');
+  var map = {};
+  links.forEach(function (a) { map[a.getAttribute('href').slice(1)] = a; });
+  function setActive(id) {
+    links.forEach(function (a) { a.classList.remove('active'); });
+    if (map[id]) map[id].classList.add('active');
+  }
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) setActive(e.target.id); });
+    }, { rootMargin: '-30% 0px -60% 0px' });
+    document.querySelectorAll('main > section').forEach(function (s) { io.observe(s); });
+  }
+  links.forEach(function (a) {
+    a.addEventListener('click', function () { setActive(a.getAttribute('href').slice(1)); });
+  });
+})();
+</script>
 </body>
 </html>
