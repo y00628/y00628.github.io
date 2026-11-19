@@ -40,6 +40,7 @@ main > h1 + section { margin-top:0; }
 .photo { width:140px; height:140px; border-radius:50%; object-fit:cover; border:3px solid var(--accent-soft); box-shadow:0 0 0 1px var(--line); }
 .intro h1 { font-size:2.7rem; margin:0 0 4px; }
 .role { margin:0; color:var(--accent); font-weight:600; font-size:1.02rem; }
+.focus { display:block; margin-top:4px; color:var(--muted); font-weight:500; font-size:.95rem; }
 .links { display:flex; flex-wrap:wrap; gap:10px; margin:24px 0 0; }
 .links a { border:1px solid var(--line); background:var(--card); color:var(--fg); padding:7px 16px; border-radius:999px; font-size:14px; font-weight:600; }
 .links a:hover { border-color:var(--accent); color:var(--accent); text-decoration:none; }
