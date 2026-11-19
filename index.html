@@ -52,6 +52,10 @@
   .date { color: var(--muted); font-size: 14px; margin-bottom: 4px; }
   .poster { display: block; margin: 4px 0 12px; }
   .poster img { width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; display: block; }
+  .status { font-weight: 600; }
+  .status.done { color: #1f8a4c; }
+  .status.wip { color: #b7791f; }
+  @media (prefers-color-scheme: dark) { .status.done { color: #5fd08b; } .status.wip { color: #e6b450; } }
   details { margin: 0 0 12px; }
   summary { cursor: pointer; color: var(--accent); font-size: 15px; padding: 2px 0; }
   summary:hover { text-decoration: underline; }
@@ -160,15 +164,15 @@
     <div class="projects">
 
       <article class="card">
-        <div class="date">Nov 2026 – Present</div>
+        <div class="date">Nov 2026 – Present · <span class="status wip">In progress</span></div>
         <h3>Scalable DLRM Inference across GPUs and CPU Memory</h3>
-        <p>CMU 15-618 final project on serving recommendation models whose embedding tables outgrow GPU memory, spreading inference across multiple GPUs and host CPU memory. Still in progress.</p>
+        <p>CMU 15-618 final project on serving recommendation models whose embedding tables outgrow GPU memory, spreading inference across multiple GPUs and host CPU memory.</p>
         <ul class="tags"><li>CUDA</li><li>C++</li><li>Parallel Programming</li></ul>
         <a href="https://y00628.github.io/dlrm-hetero-inference/">Website →</a> · <a href="https://github.com/y00628/dlrm-hetero-inference">Source →</a>
       </article>
 
       <article class="card">
-        <div class="date">Feb 2026 – May 2026</div>
+        <div class="date">Feb 2026 – May 2026 · <span class="status done">Completed</span></div>
         <h3>DAG Operator Fusion Scheduler</h3>
         <p>Team project for CMU 15-642 Machine Learning Systems: a scheduler that decides how to fuse operators in large DNN graphs and what to keep in fast memory, to cut data movement.</p>
         <ul class="tags"><li>C++</li><li>MLIR</li><li>ML Systems</li></ul>
@@ -184,7 +188,7 @@
       </article>
 
       <article class="card">
-        <div class="date">Jan 2026 – Apr 2026</div>
+        <div class="date">Jan 2026 – Apr 2026 · <span class="status done">Completed</span></div>
         <h3>Power-Efficient RV32I Pipelined Processor</h3>
         <p>A 7-stage pipelined RISC-V CPU in SystemVerilog, optimized for both performance and performance-per-watt.</p>
         <ul class="tags"><li>SystemVerilog</li><li>RTL Design</li><li>C</li></ul>
@@ -200,7 +204,7 @@
       </article>
 
       <article class="card">
-        <div class="date">Oct 2025 – Nov 2025</div>
+        <div class="date">Oct 2025 – Nov 2025 · <span class="status done">Completed</span></div>
         <h3>Dynamic Memory Allocator</h3>
         <p>A from-scratch 64-bit <code>malloc</code>/<code>free</code> in C, tuned for memory utilization and throughput.</p>
         <ul class="tags"><li>C</li><li>GDB</li><li>Memory Management</li></ul>
