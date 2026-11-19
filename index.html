@@ -49,6 +49,9 @@
   .card p { margin: 0 0 12px; }
   .tags { display: flex; flex-wrap: wrap; gap: 6px; padding: 0; margin: 0 0 12px; list-style: none; }
   .tags li { background: var(--tag); color: var(--accent); font-size: 13px; padding: 2px 10px; border-radius: 999px; }
+  .date { color: var(--muted); font-size: 14px; margin-bottom: 4px; }
+  .poster { display: block; margin: 4px 0 12px; }
+  .poster img { width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; display: block; }
   footer { padding: 32px 0 56px; color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); }
   @media (max-width: 600px) {
     .item { grid-template-columns: 1fr; }
@@ -65,6 +68,7 @@
     <a href="#education">Education</a>
     <a href="#work">Work</a>
     <a href="#projects">Projects</a>
+    <a href="#running">Running</a>
   </div>
 </nav>
 
@@ -74,9 +78,11 @@
     <h1>Yosen Lin</h1>
     <p class="role">M.S. ECE at Carnegie Mellon · Systems software, ML systems &amp; computer architecture</p>
     <p>
-      I'm a master's student at CMU working across the stack, from Linux kernel boot paths and
-      memory allocators to CUDA kernels, ML compilers and RISC-V microarchitecture. I enjoy
-      profiling a slow system, finding the real bottleneck and fixing it.
+      I grew up in Taipei, Taiwan, and came to engineering from a data science background.
+      Today I'm a master's student at CMU, and what I love most is the intersection of ML,
+      hardware and software: Linux kernel boot paths, CUDA kernels, ML compilers and RISC-V
+      microarchitecture. I like profiling a slow system, finding the real bottleneck and fixing it.
+      In my free time, I like to run.
     </p>
     <div class="links">
       <a href="mailto:yosenl@andrew.cmu.edu">Email</a>
@@ -158,31 +164,49 @@
     <div class="projects">
 
       <article class="card">
-        <h3>DAG Operator Fusion Scheduler</h3>
-        <p>Scheduler for large DNN operator graphs, rebuilt on MLIR. Graph-cut decomposition cut solver time by 88% (43s to 5s) with no loss in schedule quality. A retain-aware DP picks fusion boundaries and which tensors stay in fast memory, with in-situ output activation reuse for MatMul&rarr;Pointwise chains. Combined 35.8% end-to-end latency improvement.</p>
-        <ul class="tags"><li>C++</li><li>MLIR</li><li>ML Systems</li></ul>
-        <a href="https://github.com/y00628/mlsys-dag-scheduler-mlir">Source →</a>
+        <div class="date">Oct 2025 – Nov 2025</div>
+        <h3>Dynamic Memory Allocator</h3>
+        <p>64-bit malloc/free in C with segregated free lists, best-fit search, boundary-tag coalescing and 16-byte mini-blocks with bit-packed headers. Reached 74.5% utilization at 6,705 Kops, a 24% utilization gain over the implicit-list baseline, with a runtime heap checker for invariants.</p>
+        <ul class="tags"><li>C</li><li>GDB</li><li>Memory Management</li></ul>
       </article>
 
       <article class="card">
-        <h3>Scalable DLRM Inference across GPUs and CPU Memory</h3>
-        <p>CMU 15-618 final project on serving recommendation models whose embedding tables outgrow GPU memory, spreading inference across multiple GPUs and host CPU memory.</p>
-        <ul class="tags"><li>CUDA</li><li>C++</li><li>Parallel Programming</li></ul>
-        <a href="https://github.com/y00628/dlrm-hetero-inference">Source →</a>
-      </article>
-
-      <article class="card">
+        <div class="date">Jan 2026 – Apr 2026</div>
         <h3>Power-Efficient RV32I Pipelined Processor</h3>
         <p>7-stage pipelined RISC-V core in SystemVerilog with hazard detection, forwarding and branch resolution. Contributed a GShare predictor and write-back D-cache (26% geomean IPC gain), and designed a speculative return address stack that cut JALR mispredictions on FFT from 99.8% to 35%. Critical-path and cache tuning gave 45% better MIPS/Watt and 60% higher clock frequency.</p>
         <ul class="tags"><li>SystemVerilog</li><li>RTL Design</li><li>C</li></ul>
       </article>
 
       <article class="card">
-        <h3>Dynamic Memory Allocator</h3>
-        <p>64-bit malloc/free in C with segregated free lists, best-fit search, boundary-tag coalescing and 16-byte mini-blocks with bit-packed headers. Reached 74.5% utilization at 6,705 Kops, a 24% utilization gain over the implicit-list baseline, with a runtime heap checker for invariants.</p>
-        <ul class="tags"><li>C</li><li>GDB</li><li>Memory Management</li></ul>
+        <div class="date">Feb 2026 – May 2026</div>
+        <h3>DAG Operator Fusion Scheduler</h3>
+        <p>Team project for CMU 15-642 Machine Learning Systems. A scheduler for large DNN operator graphs that co-optimizes operator fusion and execution granularity, rebuilt on MLIR. Graph-cut decomposition cut solver time by 88% (43s to 5s) with no loss in schedule quality. A retain-aware DP picks fusion boundaries and which tensors stay in fast memory, with in-situ output activation reuse for MatMul&rarr;Pointwise chains. Combined 35.8% end-to-end latency improvement.</p>
+        <ul class="tags"><li>C++</li><li>MLIR</li><li>ML Systems</li></ul>
+        <a href="dag-scheduler-poster.pdf" class="poster" aria-label="Open the DAG scheduler poster as a PDF"><img src="dag-scheduler-poster.jpg" alt="Poster for the Directed Acyclic Graph Optimization project: introduction, seed-growth fusion method, graph-cut decomposition and benchmark results" loading="lazy"></a>
+        <a href="dag-scheduler-poster.pdf">Poster (PDF) →</a> · <a href="https://github.com/y00628/mlsys-dag-scheduler-mlir">Source →</a>
       </article>
 
+      <article class="card">
+        <div class="date">Nov 2026</div>
+        <h3>Scalable DLRM Inference across GPUs and CPU Memory</h3>
+        <p>CMU 15-618 final project on serving recommendation models whose embedding tables outgrow GPU memory, spreading inference across multiple GPUs and host CPU memory.</p>
+        <ul class="tags"><li>CUDA</li><li>C++</li><li>Parallel Programming</li></ul>
+        <a href="https://github.com/y00628/dlrm-hetero-inference">Source →</a>
+      </article>
+
+    </div>
+  </section>
+
+  <section id="running">
+    <h2>Running</h2>
+    <div class="item">
+      <div class="when">Half marathons</div>
+      <div>
+        <ul>
+          <li>Rock 'n' Roll San Diego Half Marathon, 2024</li>
+          <li>Taipei Marathon (half), 2025</li>
+        </ul>
+      </div>
     </div>
   </section>
 
