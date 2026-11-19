@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Yosen Lin</title>
 <meta name="description" content="Yosen Lin: MS ECE at CMU. GPU performance, parallel computing, LLM inference and systems software.">
-<link rel="stylesheet" href="style.css?v=6">
+<link rel="stylesheet" href="style.css?v=7">
 </head>
 <body>
 <div class="layout">
@@ -294,7 +294,21 @@
     document.querySelectorAll('main > section').forEach(function (s) { io.observe(s); });
   }
   links.forEach(function (a) {
-    a.addEventListener('click', function () { setActive(a.getAttribute('href').slice(1)); });
+    a.addEventListener('click', function (ev) {
+      var id = a.getAttribute('href').slice(1);
+      var target = document.getElementById(id);
+      if (!target) return;
+      ev.preventDefault();
+      setActive(id);
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (history.pushState) history.pushState(null, '', '#' + id);
+    });
+  });
+  var brand = document.querySelector('.brand');
+  if (brand) brand.addEventListener('click', function (ev) {
+    ev.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setActive('about');
   });
 })();
 </script>
