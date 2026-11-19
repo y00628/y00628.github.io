@@ -56,6 +56,12 @@
   .status.done { color: #1f8a4c; }
   .status.wip { color: #b7791f; }
   @media (prefers-color-scheme: dark) { .status.done { color: #5fd08b; } .status.wip { color: #e6b450; } }
+  .skills { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .card.skill { padding: 14px 14px 12px; }
+  .card.skill h3 { font-size: 15px; margin-bottom: 8px; }
+  .card.skill ul { margin: 0; padding-left: 16px; font-size: 14px; line-height: 1.5; }
+  .card.skill li { margin-bottom: 2px; }
+  @media (max-width: 700px) { .skills { grid-template-columns: repeat(2, 1fr); } }
   details { margin: 0 0 12px; }
   summary { cursor: pointer; color: var(--accent); font-size: 15px; padding: 2px 0; }
   summary:hover { text-decoration: underline; }
@@ -76,9 +82,9 @@
   <div class="wrap">
     <a class="brand" href="#top">Yosen Lin</a>
     <a href="#education">Education</a>
-    <a href="#skills">Skills</a>
     <a href="#work">Work</a>
     <a href="#projects">Projects</a>
+    <a href="#skills">Skills</a>
     <a href="#running">Runs</a>
   </div>
 </nav>
@@ -98,7 +104,7 @@
     <p>
       I love the intersection of ML, hardware and software, and I'm especially interested in ML systems,
       parallel programming and computer architecture. I enjoy working in C, C++, Python and CUDA.
-      In my free time, I like to run.
+      In my free time, I like to run, explore cafes and travel.
     </p>
     <div class="links">
       <a href="mailto:yosenl@andrew.cmu.edu">Email</a>
@@ -131,50 +137,6 @@
           <li>Courses tutored: DSC 40A (4x), DSC 140A, MATH 18</li>
         </ul>
       </div>
-    </div>
-  </section>
-
-  <section id="skills">
-    <h2>Skills</h2>
-
-    <div class="item">
-      <div class="when">Languages</div>
-      <ul class="tags"><li>C</li><li>C++</li><li>Python</li><li>Bash</li></ul>
-    </div>
-
-    <div class="item">
-      <div class="when">Systems</div>
-      <ul class="tags"><li>Linux Kernel</li><li>ARM64</li><li>Multithreading</li><li>Synchronization</li><li>Lock-Free Programming</li><li>Memory Management</li></ul>
-    </div>
-
-    <div class="item">
-      <div class="when">ML Systems</div>
-      <ul class="tags"><li>PyTorch</li><li>TensorFlow</li><li>Operator Fusion</li><li>Graph Scheduling</li><li>DNN Dataflow</li></ul>
-    </div>
-
-    <div class="item">
-      <div class="when">Parallel Programming</div>
-      <ul class="tags"><li>CUDA</li><li>OpenMP</li><li>MPI</li><li>SIMD (ISPC)</li></ul>
-    </div>
-
-    <div class="item">
-      <div class="when">Profiling &amp; Performance</div>
-      <ul class="tags"><li>Nsight Systems</li><li>Nsight Compute</li><li>Linux perf</li><li>GDB</li><li>Roofline Analysis</li><li>Workload Characterization</li><li>UART Log Analysis</li></ul>
-    </div>
-
-    <div class="item">
-      <div class="when">Hardware</div>
-      <ul class="tags"><li>RISC-V</li><li>SystemVerilog</li><li>RTL Design</li><li>Vitis HLS</li><li>Pipelining</li><li>Caches</li><li>Memory Hierarchy</li><li>Branch Prediction</li><li>Out-of-Order Execution</li></ul>
-    </div>
-
-    <div class="item">
-      <div class="when">Simulation</div>
-      <ul class="tags"><li>gem5</li><li>SystemC</li></ul>
-    </div>
-
-    <div class="item">
-      <div class="when">Build &amp; CI</div>
-      <ul class="tags"><li>Jenkins</li><li>Gerrit</li><li>Git</li></ul>
     </div>
   </section>
 
@@ -268,6 +230,100 @@
         </details>
       </article>
 
+    </div>
+  </section>
+
+  <section id="skills">
+    <h2>Skills</h2>
+    <div class="skills">
+
+      <article class="card skill">
+        <h3>Languages</h3>
+        <ul>
+          <li>C</li>
+          <li>C++</li>
+          <li>Python</li>
+          <li>Bash</li>
+        </ul>
+      </article>
+
+      <article class="card skill">
+        <h3>Systems</h3>
+        <ul>
+          <li>Linux Kernel</li>
+          <li>ARM64</li>
+          <li>Multithreading</li>
+          <li>Synchronization</li>
+          <li>Lock-Free Programming</li>
+          <li>Memory Management</li>
+        </ul>
+      </article>
+
+      <article class="card skill">
+        <h3>ML Systems</h3>
+        <ul>
+          <li>PyTorch</li>
+          <li>TensorFlow</li>
+          <li>Operator Fusion</li>
+          <li>Graph Scheduling</li>
+          <li>DNN Dataflow</li>
+        </ul>
+      </article>
+
+      <article class="card skill">
+        <h3>Parallel Programming</h3>
+        <ul>
+          <li>CUDA</li>
+          <li>OpenMP</li>
+          <li>MPI</li>
+          <li>SIMD (ISPC)</li>
+        </ul>
+      </article>
+
+      <article class="card skill">
+        <h3>Profiling &amp; Performance</h3>
+        <ul>
+          <li>Nsight Systems</li>
+          <li>Nsight Compute</li>
+          <li>Linux perf</li>
+          <li>GDB</li>
+          <li>Roofline Analysis</li>
+          <li>Workload Characterization</li>
+          <li>UART Log Analysis</li>
+        </ul>
+      </article>
+
+      <article class="card skill">
+        <h3>Hardware</h3>
+        <ul>
+          <li>RISC-V</li>
+          <li>SystemVerilog</li>
+          <li>RTL Design</li>
+          <li>Vitis HLS</li>
+          <li>Pipelining</li>
+          <li>Caches</li>
+          <li>Memory Hierarchy</li>
+          <li>Branch Prediction</li>
+          <li>Out-of-Order Execution</li>
+        </ul>
+      </article>
+
+      <article class="card skill">
+        <h3>Simulation</h3>
+        <ul>
+          <li>gem5</li>
+          <li>SystemC</li>
+        </ul>
+      </article>
+
+      <article class="card skill">
+        <h3>Build &amp; CI</h3>
+        <ul>
+          <li>Jenkins</li>
+          <li>Gerrit</li>
+          <li>Git</li>
+        </ul>
+      </article>
     </div>
   </section>
 
