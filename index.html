@@ -3,337 +3,34 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Yosen Lin — Portfolio</title>
+<title>Yosen Lin</title>
 <meta name="description" content="Yosen Lin: MS ECE at CMU. Systems software, ML systems and computer architecture.">
-<style>
-  :root {
-    --bg: #fafaf7; --fg: #1c1c1a; --muted: #6a6a64; --line: #e4e3dc;
-    --card: #ffffff; --accent: #2f5de4; --tag: #eef1fc;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root { --bg: #131413; --fg: #ecebe6; --muted: #9a9a92; --line: #2a2b29;
-            --card: #1b1c1b; --accent: #7d9bff; --tag: #20263d; }
-  }
-  * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body { margin: 0; background: var(--bg); color: var(--fg);
-         font: 17px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui, sans-serif; }
-  a { color: var(--accent); text-decoration: none; }
-  a:hover { text-decoration: underline; }
-  .wrap { max-width: 760px; margin: 0 auto; padding: 0 20px; }
-  nav { position: sticky; top: 0; background: color-mix(in srgb, var(--bg) 88%, transparent);
-        backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); z-index: 10; }
-  nav .wrap { display: flex; gap: 22px; align-items: center; height: 54px; font-size: 15px; }
-  nav .brand { font-weight: 650; margin-right: auto; color: var(--fg); }
-  nav a { color: var(--muted); }
-  nav a:hover { color: var(--fg); text-decoration: none; }
-  header.hero { padding: 72px 0 40px; }
-  h1 { font-size: clamp(2.2rem, 6vw, 3.2rem); line-height: 1.1; margin: 0 0 8px; letter-spacing: -0.02em; }
-  .role { color: var(--muted); font-size: 1.15rem; margin: 0 0 22px; }
-  .links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
-  .links a { border: 1px solid var(--line); background: var(--card); padding: 7px 14px;
-             border-radius: 999px; font-size: 15px; color: var(--fg); }
-  .links a:hover { border-color: var(--accent); text-decoration: none; }
-  section { padding: 36px 0; border-top: 1px solid var(--line); }
-  h2 { font-size: .8rem; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); margin: 0 0 24px; }
-  .item { display: grid; grid-template-columns: 150px 1fr; gap: 6px 24px; margin-bottom: 28px; }
-  .item:last-child { margin-bottom: 0; }
-  .when { color: var(--muted); font-size: 15px; padding-top: 2px; }
-  .item h3 { margin: 0; font-size: 1.05rem; }
-  .item .org { color: var(--muted); }
-  .item ul { margin: 8px 0 0; padding-left: 18px; }
-  .item li { margin-bottom: 4px; }
-  .projects { display: grid; gap: 16px; }
-  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 20px; }
-  .card h3 { margin: 0 0 6px; font-size: 1.1rem; }
-  .card p { margin: 0 0 12px; }
-  .tags { display: flex; flex-wrap: wrap; gap: 6px; padding: 0; margin: 0 0 12px; list-style: none; }
-  .tags li { background: var(--tag); color: var(--accent); font-size: 13px; padding: 2px 10px; border-radius: 999px; }
-  .date { color: var(--muted); font-size: 14px; margin-bottom: 4px; }
-  .poster { display: block; margin: 4px 0 12px; }
-  .poster img { width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; display: block; }
-  .status { font-weight: 600; }
-  .status.done { color: #1f8a4c; }
-  .status.wip { color: #b7791f; }
-  @media (prefers-color-scheme: dark) { .status.done { color: #5fd08b; } .status.wip { color: #e6b450; } }
-  .skills { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
-  .card.skill { padding: 14px 14px 12px; }
-  .card.skill h3 { font-size: 15px; margin-bottom: 8px; }
-  .card.skill ul { margin: 0; padding-left: 16px; font-size: 14px; line-height: 1.5; }
-  .card.skill li { margin-bottom: 2px; }
-  @media (max-width: 700px) { .skills { grid-template-columns: repeat(2, 1fr); } }
-  details { margin: 0 0 12px; }
-  summary { cursor: pointer; color: var(--accent); font-size: 15px; padding: 2px 0; }
-  summary:hover { text-decoration: underline; }
-  details ul { margin: 8px 0 12px; padding-left: 18px; }
-  details li { margin-bottom: 6px; }
-  code { font-size: .9em; }
-  footer { padding: 32px 0 56px; color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); }
-  @media (max-width: 600px) {
-    .item { grid-template-columns: 1fr; }
-    nav .wrap { gap: 10px; font-size: 13px; }
-    header.hero { padding-top: 48px; }
-  }
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-<nav>
-  <div class="wrap">
-    <a class="brand" href="#top">Yosen Lin</a>
-    <a href="#education">Education</a>
-    <a href="#work">Work</a>
-    <a href="#projects">Projects</a>
-    <a href="#skills">Skills</a>
-    <a href="#running">Runs</a>
-  </div>
-</nav>
-
-<main class="wrap" id="top">
-
-  <header class="hero">
+<div class="wrap">
+<nav><a href="index.html" class="active">about</a><a href="experience.html">experience</a><a href="projects.html">projects</a></nav>
+<main>
+<header class="intro">
+  <img class="photo" src="photo.jpg" alt="Photo of Yosen Lin" width="88" height="88" onerror="this.remove()">
+  <div>
     <h1>Yosen Lin</h1>
     <p class="role">M.S. ECE at Carnegie Mellon · Systems software, ML systems &amp; computer architecture</p>
-    <p>
+  </div>
+</header>
+<p>
       I grew up in Taipei, Taiwan, and came to engineering from a data science background at UCSD.
       I'm now a master's student at Carnegie Mellon, graduating in May 2027 and seeking full-time roles starting soon after.
       This past summer I interned at <a href="https://www.realtek.com/en/">Realtek</a>, building boot-time
       profiling and CI tooling for ARM64 Linux, and earlier this year I did GPU performance research at the
       <a href="https://www.cmu.edu/ece/nexus/">NEXUS Research Group</a>.
     </p>
-    <p>
+<p>
       I love the intersection of ML, hardware and software, and I'm especially interested in ML systems,
       parallel programming and computer architecture. I enjoy working in C, C++, Python and CUDA.
       In my free time, I like to run, explore cafes and travel.
     </p>
-    <div class="links">
-      <a href="mailto:yosenl@andrew.cmu.edu">Email</a>
-      <a href="https://github.com/y00628">GitHub</a>
-      <a href="https://linkedin.com/in/yosen-lin">LinkedIn</a>
-    </div>
-  </header>
-
-  <section id="education">
-    <h2>Education</h2>
-
-    <div class="item">
-      <div class="when">Aug 2025 –<br>May 2027 (expected)</div>
-      <div>
-        <h3>M.S., Electrical &amp; Computer Engineering</h3>
-        <div class="org">Carnegie Mellon University · Pittsburgh, PA</div>
-        <ul>
-          <li>Coursework: Computer Systems, Computer Architecture, Parallel Programming, Machine Learning Systems, FPGA</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="item">
-      <div class="when">Sep 2021 –<br>Mar 2025</div>
-      <div>
-        <h3>B.S., Data Science</h3>
-        <div class="org">University of California, San Diego · San Diego, CA</div>
-        <ul>
-          <li>Coursework: Deep Learning, Optimization, Reinforcement Learning</li>
-          <li>Courses tutored: DSC 40A (4x), DSC 140A, MATH 18</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <section id="work">
-    <h2>Work &amp; Research</h2>
-
-    <div class="item">
-      <div class="when">Jul – Aug 2026</div>
-      <div>
-        <h3>Software Engineer Intern</h3>
-        <div class="org"><a href="https://www.realtek.com/en/">Realtek Semiconductor Corp.</a> · Hsinchu, Taiwan</div>
-        <ul>
-          <li>Built boot-time profiling and UART log analysis tooling for ARM64 Linux, cutting measurement variance by 85% (6s to 0.9s) to enable automated boot-regression detection.</li>
-          <li>Profiled 800+ kernel initcalls and found Networking and UART/Serial to be the top two contributors to the boot critical path.</li>
-          <li>Built an end-to-end Jenkins/Gerrit CI pipeline with LLM-based patch review plus automated build and boot validation on an ARM64 SoC, reducing the patch-to-boot-result workflow to 2 manual actions.</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="item">
-      <div class="when">Jan – May 2026</div>
-      <div>
-        <h3>Graduate Research Assistant</h3>
-        <div class="org"><a href="https://www.cmu.edu/ece/nexus/">NEXUS Research Group, CMU</a> · Pittsburgh, PA</div>
-        <ul>
-          <li>Developed cooperative CUDA kernels with grid-wide synchronization for color-parallel Gibbs sampling on a Blackwell GPU, scaling to 1M+ spins.</li>
-          <li>Isolated sync overhead with barrier-injection linear regression: grid-sync reaches ~25% of sweep time at 10K spins and fades toward the bandwidth-bound limit at 1M+.</li>
-          <li>Showed the workload is memory bound via roofline analysis and Nsight Compute/Systems, contributing the GPU bottleneck decomposition to a cross-platform performance study.</li>
-        </ul>
-      </div>
-    </div>
-
-  </section>
-
-  <section id="projects">
-    <h2>Projects</h2>
-    <div class="projects">
-
-      <article class="card">
-        <div class="date">Nov 2026 – Present · <span class="status wip">In progress</span></div>
-        <h3>Scalable DLRM Inference across GPUs and CPU Memory</h3>
-        <p>Recommendation models have embedding tables too big for a single GPU. This project spreads inference across multiple GPUs and host CPU memory, so models that would normally run out of memory can still be served at scale.</p>
-        <ul class="tags"><li>CUDA</li><li>C++</li><li>Parallel Programming</li></ul>
-        <a href="https://y00628.github.io/dlrm-hetero-inference/">Website →</a> · <a href="https://github.com/y00628/dlrm-hetero-inference">Source →</a>
-      </article>
-
-      <article class="card">
-        <div class="date">Oct 2026 – Present · <span class="status wip">In progress</span></div>
-        <h3>FPGA DRAM Bandwidth Study on the Ultra96-V2</h3>
-        <p>LLM decoding is limited by memory bandwidth, not compute. This project pushes an Ultra96-V2 FPGA toward its DRAM limit on a large fully connected layer and measures what actually moves the needle: memory access settings, clock speed, port configuration and weight precision.</p>
-        <ul class="tags"><li>Vitis HLS</li><li>C++</li><li>FPGA</li></ul>
-      </article>
-
-      <article class="card">
-        <div class="date">Feb 2026 – May 2026 · <span class="status done">Completed</span></div>
-        <h3>DAG Operator Fusion Scheduler</h3>
-        <p>In deep neural networks, shuffling data between fast memory and DRAM often costs more than the math itself. This scheduler decides which operators to fuse and which tensors to keep close, slashing data movement across large DNN graphs.</p>
-        <ul class="tags"><li>C++</li><li>Operator Fusion</li><li>Graph Scheduling</li><li>DNN Dataflow</li></ul>
-        <details>
-          <summary>Details</summary>
-          <ul>
-            <li>Scaled schedule search with graph-cut decomposition, reducing solver wall time by 88% (43s to 5s) with no loss in schedule quality.</li>
-            <li>Fused MatMul&rarr;Pointwise chains with in-situ output activation reuse, keeping intermediates in fast memory and admitting fusion candidates the baseline wrongly pruned.</li>
-            <li>Designed a retain-aware DP that jointly chooses fusion boundaries and which tensors stay resident, contributing ~25% latency reduction on memory-bound benchmarks within a combined 35.8% end-to-end improvement.</li>
-          </ul>
-        </details>
-        <a href="dag-scheduler-poster.pdf">Poster (PDF) →</a> · <a href="https://github.com/y00628/mlsys-dag-scheduler">Source →</a>
-      </article>
-
-      <article class="card">
-        <div class="date">Jan 2026 – Apr 2026 · <span class="status done">Completed</span></div>
-        <h3>Power-Efficient RV32I Pipelined Processor</h3>
-        <p>A 7-stage pipelined RISC-V CPU in SystemVerilog, optimized for both performance and performance-per-watt.</p>
-        <ul class="tags"><li>SystemVerilog</li><li>RTL Design</li><li>C</li></ul>
-        <details>
-          <summary>Details</summary>
-          <ul>
-            <li>Architected the pipeline in RTL with hazard detection, data forwarding and branch resolution.</li>
-            <li>Collaborated on a GShare branch predictor and write-back D-cache, contributing to a 26% geomean IPC improvement.</li>
-            <li>Designed a speculative Return Address Stack, cutting JALR mispredictions on FFT from 99.8% to 35%.</li>
-            <li>Reduced the critical path and tuned the cache for a 45% MIPS/Watt gain and 60% higher clock frequency over baseline.</li>
-          </ul>
-        </details>
-      </article>
-
-      <article class="card">
-        <div class="date">Oct 2025 – Nov 2025 · <span class="status done">Completed</span></div>
-        <h3>Dynamic Memory Allocator</h3>
-        <p>A from-scratch 64-bit <code>malloc</code>/<code>free</code> in C, tuned for memory utilization and throughput.</p>
-        <ul class="tags"><li>C</li><li>GDB</li><li>Memory Management</li></ul>
-        <details>
-          <summary>Details</summary>
-          <ul>
-            <li>Built segregated free lists with best-fit search, reaching 74.5% utilization at 6,705 Kops throughput.</li>
-            <li>Designed 16-byte mini-blocks with bit-packed header metadata, improving utilization by 24% over the implicit-list baseline.</li>
-            <li>Implemented boundary-tag coalescing for adjacent free blocks, plus a runtime heap checker validating alignment, free-list consistency and block invariants.</li>
-          </ul>
-        </details>
-      </article>
-
-    </div>
-  </section>
-
-  <section id="skills">
-    <h2>Skills</h2>
-    <div class="skills">
-
-      <article class="card skill">
-        <h3>Languages</h3>
-        <ul>
-          <li>C</li>
-          <li>C++</li>
-          <li>Python</li>
-          <li>Bash</li>
-        </ul>
-      </article>
-
-      <article class="card skill">
-        <h3>Systems</h3>
-        <ul>
-          <li>Linux Kernel</li>
-          <li>ARM64</li>
-          <li>Multithreading</li>
-          <li>Synchronization</li>
-          <li>Lock-Free Programming</li>
-          <li>Memory Management</li>
-        </ul>
-      </article>
-
-      <article class="card skill">
-        <h3>ML Systems</h3>
-        <ul>
-          <li>PyTorch</li>
-          <li>TensorFlow</li>
-          <li>Operator Fusion</li>
-          <li>Graph Scheduling</li>
-          <li>DNN Dataflow</li>
-        </ul>
-      </article>
-
-      <article class="card skill">
-        <h3>Parallel Programming</h3>
-        <ul>
-          <li>CUDA</li>
-          <li>OpenMP</li>
-          <li>MPI</li>
-          <li>SIMD (ISPC)</li>
-        </ul>
-      </article>
-
-      <article class="card skill">
-        <h3>Profiling &amp; Performance</h3>
-        <ul>
-          <li>Nsight Systems</li>
-          <li>Nsight Compute</li>
-          <li>Linux perf</li>
-          <li>GDB</li>
-          <li>Roofline Analysis</li>
-          <li>Workload Characterization</li>
-          <li>UART Log Analysis</li>
-        </ul>
-      </article>
-
-      <article class="card skill">
-        <h3>Hardware</h3>
-        <ul>
-          <li>RISC-V</li>
-          <li>SystemVerilog</li>
-          <li>RTL Design</li>
-          <li>Vitis HLS</li>
-          <li>Pipelining</li>
-          <li>Caches</li>
-          <li>Memory Hierarchy</li>
-          <li>Branch Prediction</li>
-          <li>Out-of-Order Execution</li>
-        </ul>
-      </article>
-
-      <article class="card skill">
-        <h3>Simulation</h3>
-        <ul>
-          <li>gem5</li>
-          <li>SystemC</li>
-        </ul>
-      </article>
-
-      <article class="card skill">
-        <h3>Build &amp; CI</h3>
-        <ul>
-          <li>Jenkins</li>
-          <li>Gerrit</li>
-          <li>Git</li>
-        </ul>
-      </article>
-    </div>
-  </section>
-
+<p class="links"><a href="mailto:yosenl@andrew.cmu.edu">email</a> <a href="https://github.com/y00628">github</a> <a href="https://linkedin.com/in/yosen-lin">linkedin</a></p>
   <section id="running">
     <h2>Runs Completed</h2>
     <div class="item">
@@ -348,10 +45,7 @@
   </section>
 
 </main>
-
-<footer>
-  <div class="wrap">© 2026 Yosen Lin · <a href="mailto:yosenl@andrew.cmu.edu">yosenl@andrew.cmu.edu</a></div>
-</footer>
-
+<footer>© 2026 Yosen Lin</footer>
+</div>
 </body>
 </html>
