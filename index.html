@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Yosen Lin — Portfolio</title>
-<meta name="description" content="Personal portfolio of Yosen Lin: bio, education, work history and projects.">
+<meta name="description" content="Yosen Lin: MS ECE at CMU. Systems software, ML systems and computer architecture.">
 <style>
   :root {
     --bg: #fafaf7; --fg: #1c1c1a; --muted: #6a6a64; --line: #e4e3dc;
@@ -72,15 +72,16 @@
 
   <header class="hero">
     <h1>Yosen Lin</h1>
-    <p class="role">Graduate student · Systems, ML systems &amp; computer architecture</p>
+    <p class="role">M.S. ECE at Carnegie Mellon · Systems software, ML systems &amp; computer architecture</p>
     <p>
-      I build software and hardware that makes machine learning run faster and cheaper.
-      My interests span ML compilers, parallel programming, inference serving, and FPGA design.
-      I like taking a slow system, finding where the time goes, and fixing it.
+      I'm a master's student at CMU working across the stack, from Linux kernel boot paths and
+      memory allocators to CUDA kernels, ML compilers and RISC-V microarchitecture. I enjoy
+      profiling a slow system, finding the real bottleneck and fixing it.
     </p>
     <div class="links">
-      <a href="mailto:lin.yosen.0628@gmail.com">Email</a>
+      <a href="mailto:yosenl@andrew.cmu.edu">Email</a>
       <a href="https://github.com/y00628">GitHub</a>
+      <a href="https://linkedin.com/in/yosen-lin">LinkedIn</a>
     </div>
   </header>
 
@@ -88,50 +89,65 @@
     <h2>Education</h2>
 
     <div class="item">
-      <div class="when">2025 – 2027 (expected)</div>
+      <div class="when">Expected May 2027</div>
       <div>
         <h3>M.S., Electrical &amp; Computer Engineering</h3>
-        <div class="org">Carnegie Mellon University</div>
+        <div class="org">Carnegie Mellon University · Pittsburgh, PA</div>
         <ul>
-          <li>Coursework: Parallel Computer Architecture &amp; Programming, Modern Computer Architecture, FPGA Design, ML Systems</li>
+          <li>Coursework: Computer Systems, Computer Architecture, Parallel Programming, Machine Learning Systems, FPGA</li>
         </ul>
       </div>
     </div>
 
     <div class="item">
-      <div class="when">2021 – 2025</div>
+      <div class="when">Graduated Mar 2025</div>
       <div>
-        <h3>B.S., Your Major</h3>
-        <div class="org">Your Undergraduate University</div>
+        <h3>B.S., Data Science</h3>
+        <div class="org">University of California, San Diego · San Diego, CA</div>
         <ul>
-          <li>Honors, GPA, or relevant coursework</li>
+          <li>Coursework: Deep Learning, Optimization, Reinforcement Learning</li>
         </ul>
       </div>
     </div>
   </section>
 
   <section id="work">
-    <h2>Work History</h2>
+    <h2>Work &amp; Research</h2>
 
     <div class="item">
-      <div class="when">Summer 2026</div>
+      <div class="when">Jul – Aug 2026</div>
       <div>
-        <h3>Software Engineering Intern</h3>
-        <div class="org">Company Name</div>
+        <h3>Software Engineer Intern</h3>
+        <div class="org">Realtek Semiconductor Corp. · Hsinchu, Taiwan</div>
         <ul>
-          <li>Built X that improved Y by Z%.</li>
-          <li>Collaborated with a team of N to ship feature or system.</li>
+          <li>Built boot-time profiling and UART log analysis tooling for ARM64 Linux, cutting measurement variance by 85% (6s to 0.9s) to enable automated boot-regression detection.</li>
+          <li>Profiled 800+ kernel initcalls and found Networking and UART/Serial to be the top two contributors to the boot critical path.</li>
+          <li>Built an end-to-end Jenkins/Gerrit CI pipeline with LLM-based patch review plus automated build and boot validation on an ARM64 SoC, reducing the patch-to-boot-result workflow to 2 manual actions.</li>
         </ul>
       </div>
     </div>
 
     <div class="item">
-      <div class="when">2024 – 2025</div>
+      <div class="when">Jan – May 2026</div>
       <div>
-        <h3>Research Assistant</h3>
-        <div class="org">Lab or Organization</div>
+        <h3>Graduate Research Assistant</h3>
+        <div class="org">NEXUS Research Group, CMU · Pittsburgh, PA</div>
         <ul>
-          <li>Describe the problem, your contribution, and the measurable result.</li>
+          <li>Developed cooperative CUDA kernels with grid-wide synchronization for color-parallel Gibbs sampling on a Blackwell GPU, scaling to 1M+ spins.</li>
+          <li>Isolated sync overhead with barrier-injection linear regression: grid-sync reaches ~25% of sweep time at 10K spins and fades toward the bandwidth-bound limit at 1M+.</li>
+          <li>Showed the workload is memory bound via roofline analysis and Nsight Compute/Systems, contributing the GPU bottleneck decomposition to a cross-platform performance study.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="when">UCSD</div>
+      <div>
+        <h3>Tutor</h3>
+        <div class="org">University of California, San Diego</div>
+        <ul>
+          <li>DSC 40A (Theoretical Foundations of Data Science), tutored four times.</li>
+          <li>DSC 140A (Probabilistic Modeling and Machine Learning) and MATH 18 (Linear Algebra).</li>
         </ul>
       </div>
     </div>
@@ -142,38 +158,29 @@
     <div class="projects">
 
       <article class="card">
-        <h3>DAG Scheduler on MLIR</h3>
-        <p>A scheduler for ML computation graphs built on MLIR, exploring how operator ordering and placement affect end-to-end latency.</p>
-        <ul class="tags"><li>MLIR</li><li>C++</li><li>ML Systems</li></ul>
+        <h3>DAG Operator Fusion Scheduler</h3>
+        <p>Scheduler for large DNN operator graphs, rebuilt on MLIR. Graph-cut decomposition cut solver time by 88% (43s to 5s) with no loss in schedule quality. A retain-aware DP picks fusion boundaries and which tensors stay in fast memory, with in-situ output activation reuse for MatMul&rarr;Pointwise chains. Combined 35.8% end-to-end latency improvement.</p>
+        <ul class="tags"><li>C++</li><li>MLIR</li><li>ML Systems</li></ul>
         <a href="https://github.com/y00628/mlsys-dag-scheduler-mlir">Source →</a>
       </article>
 
       <article class="card">
-        <h3>moe-serve</h3>
-        <p>An inference-serving system for Mixture-of-Experts models, focused on expert routing, batching and memory-efficient execution.</p>
-        <ul class="tags"><li>Python</li><li>CUDA</li><li>LLM Inference</li></ul>
-        <a href="https://github.com/y00628/moe-serve">Source →</a>
-      </article>
-
-      <article class="card">
-        <h3>Heterogeneous DLRM Inference</h3>
-        <p>Recommendation-model inference split across CPU and GPU to balance embedding lookups and dense compute, built for a parallel programming course.</p>
-        <ul class="tags"><li>C++</li><li>CUDA</li><li>Parallel Programming</li></ul>
+        <h3>Scalable DLRM Inference across GPUs and CPU Memory</h3>
+        <p>CMU 15-618 final project on serving recommendation models whose embedding tables outgrow GPU memory, spreading inference across multiple GPUs and host CPU memory.</p>
+        <ul class="tags"><li>CUDA</li><li>C++</li><li>Parallel Programming</li></ul>
         <a href="https://github.com/y00628/dlrm-hetero-inference">Source →</a>
       </article>
 
       <article class="card">
-        <h3>FPGA Project</h3>
-        <p>Hardware design project from the FPGA course. Summarize what it accelerates and the speedup or resource numbers you achieved.</p>
-        <ul class="tags"><li>Verilog</li><li>HLS</li><li>FPGA</li></ul>
-        <a href="https://github.com/y00628/18643-project">Source →</a>
+        <h3>Power-Efficient RV32I Pipelined Processor</h3>
+        <p>7-stage pipelined RISC-V core in SystemVerilog with hazard detection, forwarding and branch resolution. Contributed a GShare predictor and write-back D-cache (26% geomean IPC gain), and designed a speculative return address stack that cut JALR mispredictions on FFT from 99.8% to 35%. Critical-path and cache tuning gave 45% better MIPS/Watt and 60% higher clock frequency.</p>
+        <ul class="tags"><li>SystemVerilog</li><li>RTL Design</li><li>C</li></ul>
       </article>
 
       <article class="card">
-        <h3>Eclipse NBA Points</h3>
-        <p>A model that predicts NBA player scoring from game and player features.</p>
-        <ul class="tags"><li>Python</li><li>Machine Learning</li></ul>
-        <a href="https://github.com/y00628/eclipse-nba-points">Source →</a>
+        <h3>Dynamic Memory Allocator</h3>
+        <p>64-bit malloc/free in C with segregated free lists, best-fit search, boundary-tag coalescing and 16-byte mini-blocks with bit-packed headers. Reached 74.5% utilization at 6,705 Kops, a 24% utilization gain over the implicit-list baseline, with a runtime heap checker for invariants.</p>
+        <ul class="tags"><li>C</li><li>GDB</li><li>Memory Management</li></ul>
       </article>
 
     </div>
@@ -182,7 +189,7 @@
 </main>
 
 <footer>
-  <div class="wrap">© 2026 Yosen Lin · <a href="mailto:lin.yosen.0628@gmail.com">lin.yosen.0628@gmail.com</a></div>
+  <div class="wrap">© 2026 Yosen Lin · <a href="mailto:yosenl@andrew.cmu.edu">yosenl@andrew.cmu.edu</a></div>
 </footer>
 
 </body>
