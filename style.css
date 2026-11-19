@@ -91,7 +91,7 @@ footer { margin-top:56px; padding-top:16px; border-top:1px solid var(--line); co
 main > section { padding-top: 56px; margin-top: 0; scroll-margin-top: 0; }
 main > section:first-child { padding-top: 0; }
 main > section + section { border-top: 1px solid var(--line); margin-top: 56px; }
-main > section:last-of-type { min-height: 70vh; }
+main > section:last-of-type { min-height: calc(100vh - 56px); }
 main > section > h2 { font-size: 1.5rem; text-transform: none; letter-spacing: -.01em; color: var(--fg); font-weight: 700; margin: 0 0 24px; }
 @media (max-width: 860px) {
   .side { position: sticky; top: 0; z-index: 10; background: var(--bg); }
