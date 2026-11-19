@@ -49,3 +49,5 @@ details ul { margin:8px 0 8px; padding-left:18px; }
 footer { margin:56px 0 40px; padding-top:16px; border-top:1px solid var(--line); color:var(--muted); font-size:12px; }
 @media (max-width:700px) { .skills { grid-template-columns:repeat(2,1fr); } }
 @media (max-width:560px) { .item { grid-template-columns:1fr; } .intro { align-items:flex-start; } }
+main > h1 + section { margin-top: 0; }
+@media (max-width:560px) { nav { gap: 12px; font-size: 12px; flex-wrap: wrap; } }
