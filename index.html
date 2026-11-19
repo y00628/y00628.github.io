@@ -178,7 +178,7 @@
       <article class="card">
         <div class="date">Nov 2026 – Present · <span class="status wip">In progress</span></div>
         <h3>Scalable DLRM Inference across GPUs and CPU Memory</h3>
-        <p>CMU 15-618 final project on serving recommendation models whose embedding tables outgrow GPU memory, spreading inference across multiple GPUs and host CPU memory.</p>
+        <p>Recommendation models have embedding tables too big for a single GPU. This project spreads inference across multiple GPUs and host CPU memory, so models that would normally run out of memory can still be served at scale.</p>
         <ul class="tags"><li>CUDA</li><li>C++</li><li>Parallel Programming</li></ul>
         <a href="https://y00628.github.io/dlrm-hetero-inference/">Website →</a> · <a href="https://github.com/y00628/dlrm-hetero-inference">Source →</a>
       </article>
@@ -186,14 +186,14 @@
       <article class="card">
         <div class="date">Oct 2026 – Present · <span class="status wip">In progress</span></div>
         <h3>FPGA DRAM Bandwidth Study on the Ultra96-V2</h3>
-        <p>Team project for CMU 18-643 (FPGA design) studying how close an FPGA can get to its board's DRAM bandwidth limit on a memory-bound workload: a large fully connected layer, the core step of LLM decoding. Explores which memory access settings, clock speeds, port configurations and weight precisions affect latency.</p>
+        <p>LLM decoding is limited by memory bandwidth, not compute. This project pushes an Ultra96-V2 FPGA toward its DRAM limit on a large fully connected layer and measures what actually moves the needle: memory access settings, clock speed, port configuration and weight precision.</p>
         <ul class="tags"><li>Vitis HLS</li><li>C++</li><li>FPGA</li></ul>
       </article>
 
       <article class="card">
         <div class="date">Feb 2026 – May 2026 · <span class="status done">Completed</span></div>
         <h3>DAG Operator Fusion Scheduler</h3>
-        <p>Team project for CMU 15-642 Machine Learning Systems: a scheduler that decides how to fuse operators in large DNN graphs and what to keep in fast memory, to cut data movement.</p>
+        <p>In deep neural networks, shuffling data between fast memory and DRAM often costs more than the math itself. This scheduler decides which operators to fuse and which tensors to keep close, slashing data movement across large DNN graphs.</p>
         <ul class="tags"><li>C++</li><li>MLIR</li><li>ML Systems</li></ul>
         <details>
           <summary>Details</summary>
