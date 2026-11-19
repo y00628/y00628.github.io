@@ -101,7 +101,7 @@
     <h2>Education</h2>
 
     <div class="item">
-      <div class="when">Aug 2025 – May 2027 (expected)</div>
+      <div class="when">Aug 2025 –<br>May 2027 (expected)</div>
       <div>
         <h3>M.S., Electrical &amp; Computer Engineering</h3>
         <div class="org">Carnegie Mellon University · Pittsburgh, PA</div>
@@ -112,7 +112,7 @@
     </div>
 
     <div class="item">
-      <div class="when">Sep 2021 – Mar 2025</div>
+      <div class="when">Sep 2021 –<br>Mar 2025</div>
       <div>
         <h3>B.S., Data Science</h3>
         <div class="org">University of California, San Diego · San Diego, CA</div>
@@ -170,18 +170,27 @@
     <div class="projects">
 
       <article class="card">
-        <div class="date">Oct 2025 – Nov 2025</div>
-        <h3>Dynamic Memory Allocator</h3>
-        <p>A from-scratch 64-bit <code>malloc</code>/<code>free</code> in C, tuned for memory utilization and throughput.</p>
-        <ul class="tags"><li>C</li><li>GDB</li><li>Memory Management</li></ul>
+        <div class="date">Nov 2026 – Present</div>
+        <h3>Scalable DLRM Inference across GPUs and CPU Memory</h3>
+        <p>CMU 15-618 final project on serving recommendation models whose embedding tables outgrow GPU memory, spreading inference across multiple GPUs and host CPU memory. Still in progress.</p>
+        <ul class="tags"><li>CUDA</li><li>C++</li><li>Parallel Programming</li></ul>
+        <a href="https://y00628.github.io/dlrm-hetero-inference/">Website →</a> · <a href="https://github.com/y00628/dlrm-hetero-inference">Source →</a>
+      </article>
+
+      <article class="card">
+        <div class="date">Feb 2026 – May 2026</div>
+        <h3>DAG Operator Fusion Scheduler</h3>
+        <p>Team project for CMU 15-642 Machine Learning Systems: a scheduler that decides how to fuse operators in large DNN graphs and what to keep in fast memory, to cut data movement.</p>
+        <ul class="tags"><li>C++</li><li>MLIR</li><li>ML Systems</li></ul>
         <details>
           <summary>Details</summary>
           <ul>
-            <li>Built segregated free lists with best-fit search, reaching 74.5% utilization at 6,705 Kops throughput.</li>
-            <li>Designed 16-byte mini-blocks with bit-packed header metadata, improving utilization by 24% over the implicit-list baseline.</li>
-            <li>Implemented boundary-tag coalescing for adjacent free blocks, plus a runtime heap checker validating alignment, free-list consistency and block invariants.</li>
+            <li>Scaled schedule search with graph-cut decomposition, reducing solver wall time by 88% (43s to 5s) with no loss in schedule quality.</li>
+            <li>Fused MatMul&rarr;Pointwise chains with in-situ output activation reuse, keeping intermediates in fast memory and admitting fusion candidates the baseline wrongly pruned.</li>
+            <li>Designed a retain-aware DP that jointly chooses fusion boundaries and which tensors stay resident, contributing ~25% latency reduction on memory-bound benchmarks within a combined 35.8% end-to-end improvement.</li>
           </ul>
         </details>
+        <a href="dag-scheduler-poster.pdf">Poster (PDF) →</a> · <a href="https://github.com/y00628/mlsys-dag-scheduler-mlir">Source →</a>
       </article>
 
       <article class="card">
@@ -201,28 +210,18 @@
       </article>
 
       <article class="card">
-        <div class="date">Feb 2026 – May 2026</div>
-        <h3>DAG Operator Fusion Scheduler</h3>
-        <p>Team project for CMU 15-642 Machine Learning Systems: a scheduler that decides how to fuse operators in large DNN graphs and what to keep in fast memory, to cut data movement.</p>
-        <ul class="tags"><li>C++</li><li>MLIR</li><li>ML Systems</li></ul>
+        <div class="date">Oct 2025 – Nov 2025</div>
+        <h3>Dynamic Memory Allocator</h3>
+        <p>A from-scratch 64-bit <code>malloc</code>/<code>free</code> in C, tuned for memory utilization and throughput.</p>
+        <ul class="tags"><li>C</li><li>GDB</li><li>Memory Management</li></ul>
         <details>
           <summary>Details</summary>
           <ul>
-            <li>Scaled schedule search with graph-cut decomposition, reducing solver wall time by 88% (43s to 5s) with no loss in schedule quality.</li>
-            <li>Fused MatMul&rarr;Pointwise chains with in-situ output activation reuse, keeping intermediates in fast memory and admitting fusion candidates the baseline wrongly pruned.</li>
-            <li>Designed a retain-aware DP that jointly chooses fusion boundaries and which tensors stay resident, contributing ~25% latency reduction on memory-bound benchmarks within a combined 35.8% end-to-end improvement.</li>
+            <li>Built segregated free lists with best-fit search, reaching 74.5% utilization at 6,705 Kops throughput.</li>
+            <li>Designed 16-byte mini-blocks with bit-packed header metadata, improving utilization by 24% over the implicit-list baseline.</li>
+            <li>Implemented boundary-tag coalescing for adjacent free blocks, plus a runtime heap checker validating alignment, free-list consistency and block invariants.</li>
           </ul>
-          <a href="dag-scheduler-poster.pdf" class="poster" aria-label="Open the DAG scheduler poster as a PDF"><img src="dag-scheduler-poster.jpg" alt="Poster for the Directed Acyclic Graph Optimization project: introduction, seed-growth fusion method, graph-cut decomposition and benchmark results" loading="lazy"></a>
         </details>
-        <a href="dag-scheduler-poster.pdf">Poster (PDF) →</a> · <a href="https://github.com/y00628/mlsys-dag-scheduler-mlir">Source →</a>
-      </article>
-
-      <article class="card">
-        <div class="date">Nov 2026 – Present</div>
-        <h3>Scalable DLRM Inference across GPUs and CPU Memory</h3>
-        <p>CMU 15-618 final project on serving recommendation models whose embedding tables outgrow GPU memory, spreading inference across multiple GPUs and host CPU memory. Still in progress.</p>
-        <ul class="tags"><li>CUDA</li><li>C++</li><li>Parallel Programming</li></ul>
-        <a href="https://github.com/y00628/dlrm-hetero-inference">Source →</a>
       </article>
 
     </div>
