@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dynamic Memory Allocator Demo</title>
+<style>
+/* Layout concept: a heap strip of 16 B units that starts empty and can grow. Requests arrive, the
+   smallest free block that fits is split, freed blocks merge with free neighbors, and when nothing
+   fits the heap is extended. Palette and type match the portfolio site (warm off-white, blue accent). */
+:root {
+  --bg: #fafaf7; --surface: #ffffff; --fg: #1c1c1a; --muted: #6a6a64;
+  --line: #e4e3dc; --line-strong: #c9c7bc; --accent: #2f5de4; --accent-soft: #eef1fc;
+  --alloc: #2f5de4; --on-alloc: #ffffff; --mini: #8aa6f2; --on-mini: #10224f;
+  --free-a: #f3f2ec; --free-b: #e9e7de; --heap-bg: #ecebe3;
+  --scan: #d98a00; --merge: #1f8a4c; --ext: #0f8b7d;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #131413; --surface: #1b1c1b; --fg: #ecebe6; --muted: #9a9a92;
+    --line: #2a2b29; --line-strong: #3d3f3b; --accent: #7d9bff; --accent-soft: #20263d;
+    --alloc: #3f66e0; --on-alloc: #ffffff; --mini: #9db4ff; --on-mini: #0d1a40;
+    --free-a: #1f201f; --free-b: #272826; --heap-bg: #101110;
+    --scan: #f0b429; --merge: #4cc38a; --ext: #3dd6c3; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #131413; --surface: #1b1c1b; --fg: #ecebe6; --muted: #9a9a92;
+  --line: #2a2b29; --line-strong: #3d3f3b; --accent: #7d9bff; --accent-soft: #20263d;
+  --alloc: #3f66e0; --on-alloc: #ffffff; --mini: #9db4ff; --on-mini: #0d1a40;
+  --free-a: #1f201f; --free-b: #272826; --heap-bg: #101110;
+  --scan: #f0b429; --merge: #4cc38a; --ext: #3dd6c3; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 15px; line-height: 1.55;
+  padding-inline: max(16px, env(safe-area-inset-left, 0px)) max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 24px;
+}
+.ma-page { max-width: 760px; margin: 0 auto; }
+.ma { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 20px; display: grid; gap: 16px; }
+.ma-head h1 { margin: 0; font-size: 1.3rem; letter-spacing: -0.01em; line-height: 1.2; }
+.ma-sub { margin: 4px 0 0; color: var(--muted); font-size: 14px; }
+
+.ma-controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.ma button, .ma select {
+  font: inherit; font-size: 14px; color: var(--fg); background: var(--surface);
+  border: 1px solid var(--line-strong); border-radius: 8px; padding: 5px 12px; cursor: pointer;
+}
+.ma button:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+.ma button:disabled { opacity: .45; cursor: default; }
+.ma button.primary { background: var(--accent); border-color: var(--accent); color: var(--surface); }
+.ma button.primary:hover { color: var(--surface); filter: brightness(1.08); }
+.ma label { font-size: 13px; color: var(--muted); display: inline-flex; gap: 6px; align-items: center; }
+.ma .ml-auto { margin-left: auto; }
+.ma :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.ma-log { display: flex; gap: 12px; align-items: baseline; min-height: 3.2em; }
+.ma-op { font: 700 13px var(--mono); background: var(--fg); color: var(--bg); padding: 2px 8px; border-radius: 6px; white-space: nowrap; }
+.ma-msg { font-size: 14px; min-width: 0; }
+
+.ma-heapwrap { display: grid; gap: 6px; }
+.ma-heap { position: relative; height: 76px; background: var(--heap-bg); border-radius: 8px; overflow: hidden; }
+.ma-b { position: absolute; top: 0; bottom: 0; padding: 3px 1px; transition: left .7s cubic-bezier(.4,0,.2,1), width .7s cubic-bezier(.4,0,.2,1), opacity .45s ease; }
+.ma-b.is-enter, .ma-b.is-gone { opacity: 0; }
+.ma-b.is-gone { pointer-events: none; }
+.ma-b.alloc-click { cursor: pointer; }
+.ma-b:focus-visible { outline: none; }
+.ma-b:focus-visible .ma-i { box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--accent); }
+.ma-i { position: relative; height: 100%; border-radius: 5px; overflow: hidden; display: flex; align-items: center; justify-content: center;
+  font: 700 11px/1 var(--mono); white-space: nowrap; transition: background-color .4s ease, box-shadow .3s ease; }
+.ma-i.alloc { background: var(--alloc); color: var(--on-alloc); }
+.ma-i.mini { background: var(--mini); color: var(--on-mini); }
+.ma-i.free { background: repeating-linear-gradient(135deg, var(--free-a) 0 6px, var(--free-b) 6px 12px); color: var(--muted); box-shadow: inset 0 0 0 1px var(--line-strong); }
+.ma-i.free.ext { background: color-mix(in srgb, var(--ext) 16%, var(--surface)); color: var(--ext); box-shadow: inset 0 0 0 2px var(--ext); }
+.ma-h, .ma-f { position: absolute; top: 0; bottom: 0; width: 4px; background: rgba(0,0,0,.32); }
+.ma-h { left: 0; } .ma-f { right: 0; background: var(--line-strong); }
+.ma-b.is-cand .ma-i { box-shadow: inset 0 0 0 2px var(--scan); }
+.ma-b.is-pick .ma-i { box-shadow: inset 0 0 0 3px var(--scan), 0 0 14px color-mix(in srgb, var(--scan) 55%, transparent); }
+.ma-b.is-merge .ma-i { box-shadow: inset 0 0 0 3px var(--merge); }
+.ma-b.is-new .ma-i { animation: ma-pop .9s ease-out; }
+@keyframes ma-pop { from { filter: brightness(1.45); } to { filter: none; } }
+.ma-axis { position: relative; height: 16px; font: 11px/1 var(--mono); color: var(--muted); }
+.ma-axis span { position: absolute; top: 0; transform: translateX(-50%); }
+.ma-axis span:first-child { transform: none; } .ma-axis span:last-child { transform: translateX(-100%); }
+
+.ma-metrics { display: grid; grid-template-columns: 1.3fr 1.1fr .9fr; gap: 12px; }
+.ma-metric { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; display: grid; gap: 4px; align-content: start; min-width: 0; }
+.ma-metric h2 { margin: 0; font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); font-weight: 600; }
+.ma-big { font-size: 1.35rem; font-weight: 700; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; line-height: 1.25; }
+.ma-big small { font-size: 13px; font-weight: 500; color: var(--muted); margin-left: 4px; }
+.ma-note { font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.ma-note b { color: var(--fg); font-weight: 600; }
+.ma-meter { height: 8px; background: var(--heap-bg); border-radius: 999px; overflow: hidden; }
+.ma-meter i { display: block; height: 100%; width: 0; background: var(--accent); border-radius: 999px; transition: width .55s cubic-bezier(.4,0,.2,1); }
+.ma-metric.flash { animation: ma-flash 1.2s ease-out; }
+@keyframes ma-flash { 0% { border-color: var(--ext); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ext) 25%, transparent); } 100% { border-color: var(--line); box-shadow: none; } }
+.ma-fine { margin: 0; font-size: 12px; color: var(--muted); }
+
+.ma-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12.5px; color: var(--muted); }
+.ma-legend span { display: inline-flex; gap: 6px; align-items: center; }
+.ma-legend i { width: 14px; height: 14px; border-radius: 4px; display: inline-block; }
+.ma-legend .a { background: var(--alloc); } .ma-legend .m { background: var(--mini); }
+.ma-legend .f { background: repeating-linear-gradient(135deg, var(--free-a) 0 4px, var(--free-b) 4px 8px); box-shadow: inset 0 0 0 1px var(--line-strong); }
+.ma-legend .s { background: transparent; box-shadow: inset 0 0 0 2px var(--scan); }
+.ma-legend .g { background: transparent; box-shadow: inset 0 0 0 2px var(--merge); }
+.ma-legend .e { background: color-mix(in srgb, var(--ext) 16%, var(--surface)); box-shadow: inset 0 0 0 2px var(--ext); }
+.ma-try { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding-top: 12px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
+
+@media (max-width: 640px) {
+  .ma { padding: 16px; }
+  .ma-metrics { grid-template-columns: 1fr 1fr; }
+  .ma-metrics .ma-metric:first-child { grid-column: 1 / -1; }
+  .ma-heap { height: 64px; }
+  .ma-log { flex-direction: column; gap: 6px; }
+  .ma .ml-auto { margin-left: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ma-b, .ma-i, .ma-meter i { transition: none; }
+  .ma-b.is-new .ma-i, .ma-metric.flash { animation: none; }
+}
+
+/* embedded inside the portfolio card: drop the outer box and the duplicate title */
+html.embedded body { padding: 0; background: transparent; }
+html.embedded .ma { border: 0; padding: 0; border-radius: 0; background: transparent; }
+html.embedded .ma-head h1 { display: none; }
+html.embedded .ma-page { max-width: none; }
+</style>
+</head>
+<body>
+<main class="ma-page">
+<section class="ma" id="ma" aria-labelledby="ma-title">
+  <header class="ma-head">
+    <h1 id="ma-title">Dynamic Memory Allocator</h1>
+    <p class="ma-sub">A 64-bit malloc/free in C. Each request takes the smallest free block that fits, freed blocks merge with free neighbors, and the heap grows when nothing fits.</p>
+  </header>
+
+  <div class="ma-controls">
+    <button type="button" id="ma-play" class="primary">Pause</button>
+    <button type="button" id="ma-step" disabled>Step</button>
+    <button type="button" id="ma-reset">Reset</button>
+    <label for="ma-speed" class="ml-auto">Speed
+      <select id="ma-speed">
+        <option value="0.6">0.6&times;</option>
+        <option value="1" selected>1&times;</option>
+        <option value="1.6">1.6&times;</option>
+        <option value="2.5">2.5&times;</option>
+      </select>
+    </label>
+  </div>
+
+  <div class="ma-log" role="status" aria-live="polite">
+    <span class="ma-op" id="ma-op">heap</span>
+    <span class="ma-msg" id="ma-msg">Empty heap: one 384 B free block.</span>
+  </div>
+
+  <div class="ma-heapwrap">
+    <div class="ma-heap" id="ma-heap"></div>
+    <div class="ma-axis" id="ma-axis" aria-hidden="true"></div>
+  </div>
+
+  <div class="ma-metrics">
+    <div class="ma-metric">
+      <h2>Heap in use</h2>
+      <div class="ma-meter" aria-hidden="true"><i id="ma-meter"></i></div>
+      <div class="ma-big" id="ma-util">0%</div>
+      <div class="ma-note" id="ma-utilnote">0 B requested of 384 B</div>
+      <div class="ma-note">Max utilization so far: <b id="ma-peak">0%</b></div>
+    </div>
+    <div class="ma-metric">
+      <h2>Throughput</h2>
+      <div class="ma-big" id="ma-tp">&ndash;<small>Kops</small></div>
+      <div class="ma-note">Current</div>
+      <div class="ma-note">Max so far: <b id="ma-tpmax">&ndash;</b></div>
+    </div>
+    <div class="ma-metric" id="ma-sizecard">
+      <h2>Heap size</h2>
+      <div class="ma-big" id="ma-size">384 B</div>
+      <div class="ma-note" id="ma-extnote">not extended yet</div>
+    </div>
+  </div>
+  <p class="ma-fine">Throughput is simulated from the work each operation does. Sample benchmark run: 74.5% utilization, 6,705 Kops.</p>
+
+  <div class="ma-legend" aria-label="Legend">
+    <span><i class="a"></i>allocated</span>
+    <span><i class="m"></i>16 B mini-block</span>
+    <span><i class="f"></i>free</span>
+    <span><i class="s"></i>best fit search</span>
+    <span><i class="g"></i>merging</span>
+    <span><i class="e"></i>new heap memory</span>
+  </div>
+
+  <div class="ma-try">
+    <span>Try it:</span>
+    <label for="ma-sizesel">Request
+      <select id="ma-sizesel">
+        <option value="8">8 B</option>
+        <option value="24">24 B</option>
+        <option value="56">56 B</option>
+        <option value="100">100 B</option>
+        <option value="160" selected>160 B</option>
+      </select>
+    </label>
+    <button type="button" id="ma-malloc">malloc</button>
+    <span>Click or press Enter on an allocated block to free it.</span>
+  </div>
+</section>
+</main>
+
+<script>
+(function () {
+  'use strict';
+  if (window.self !== window.top) document.documentElement.classList.add('embedded');
+
+  var UB = 16;                       /* one unit = 16 B */
+  var INIT = 24;                     /* initial heap: 24 units = 384 B */
+  var CHUNK = 8;                     /* smallest heap extension: 128 B */
+  var MAX_UNITS = 64;                /* demo cap: 1 KB */
+  var BASE_KOPS = 6705;              /* throughput of the cheapest operation in this simulation */
+  var UNITS = INIT;
+
+  var SCRIPT = [
+    ['malloc', 'A', 40], ['malloc', 'B', 8], ['malloc', 'C', 100], ['malloc', 'D', 24],
+    ['malloc', 'E', 8], ['malloc', 'F', 56],
+    ['free', 'B'], ['free', 'D'], ['free', 'C'],
+    ['malloc', 'G', 72], ['malloc', 'H', 8],
+    ['malloc', 'X', 160],
+    ['free', 'A'], ['free', 'X'], ['free', 'F'], ['free', 'E'], ['free', 'G'], ['free', 'H'],
+    ['restart']
+  ];
+
+  var $ = function (s) { return document.querySelector(s); };
+  var heapEl = $('#ma-heap'), axisEl = $('#ma-axis'), opEl = $('#ma-op'), msgEl = $('#ma-msg');
+  var meterEl = $('#ma-meter'), utilEl = $('#ma-util'), utilNoteEl = $('#ma-utilnote'), peakEl = $('#ma-peak');
+  var tpEl = $('#ma-tp'), tpMaxEl = $('#ma-tpmax'), sizeEl = $('#ma-size'), extNoteEl = $('#ma-extnote'), sizeCard = $('#ma-sizecard');
+  var playBtn = $('#ma-play'), stepBtn = $('#ma-step'), resetBtn = $('#ma-reset');
+  var speedSel = $('#ma-speed'), sizeSel = $('#ma-sizesel'), mallocBtn = $('#ma-malloc');
+
+  var reduced = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var ABORT = {};
+  var blocks = [], gen = 0, speed = 1, pc = 0, playing = !reduced, driving = false;
+  var queue = Promise.resolve(), visible = true, visWaiters = [];
+  var peak = 0, curTp = null, maxTp = 0, extCount = 0, extBytes = 0;
+  var ui = { cands: new Set(), pick: null, fresh: null, merge: new Set(), ext: null };
+
+  /* ---------- helpers ---------- */
+  var sleep = function (ms) { return new Promise(function (r) { setTimeout(r, ms); }); };
+  var unitsFor = function (bytes) { return bytes <= 8 ? 1 : Math.ceil((bytes + 8) / UB); };
+  var addr = function (u) { return '0x' + (u * UB).toString(16).padStart(3, '0'); };
+  var fmt = function (n) { return n.toLocaleString('en-US'); };
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  function setOp(op, msg) { opEl.textContent = op; msgEl.textContent = msg; }
+  function clearUI() { ui = { cands: new Set(), pick: null, fresh: null, merge: new Set(), ext: null }; }
+  function enqueue(fn) {
+    queue = queue.then(fn).catch(function (e) { if (e !== ABORT) console.error(e); });
+    return queue;
+  }
+  function whenVisible() {
+    return (visible && !document.hidden) ? Promise.resolve() : new Promise(function (r) { visWaiters.push(r); });
+  }
+  function flushVis() { if (visible && !document.hidden) { var w = visWaiters; visWaiters = []; w.forEach(function (r) { r(); }); } }
+
+  /* ---------- blocks ---------- */
+  function mk(start, size, alloc, id, req) {
+    var b = { start: start, size: size, alloc: !!alloc, id: id || '', req: req || 0 };
+    var e = el('div', 'ma-b');
+    e.tabIndex = 0;
+    e.innerHTML = '<div class="ma-i"><i class="ma-h"></i><span class="ma-t"></span><i class="ma-f"></i></div>';
+    e.addEventListener('click', function () { if (b.alloc) manualFree(b.id); });
+    e.addEventListener('keydown', function (ev) {
+      if ((ev.key === 'Enter' || ev.key === ' ') && b.alloc) { ev.preventDefault(); manualFree(b.id); }
+    });
+    b.el = e;
+    heapEl.appendChild(e);
+    return b;
+  }
+
+  function labelFor(b) {
+    if (ui.ext === b) return b.size >= 3 ? 'new ' + (b.size * UB) + 'B' : 'new';
+    if (b.alloc) return b.size >= 4 ? b.id + ' ' + (b.size * UB) + 'B' : b.id;
+    if (b.size >= 6) return 'free ' + (b.size * UB) + 'B';
+    return b.size >= 3 ? 'free' : '';
+  }
+
+  function paint(b) {
+    var e = b.el, inner = e.firstChild;
+    e.style.left = (b.start / UNITS * 100) + '%';
+    e.style.width = (b.size / UNITS * 100) + '%';
+    inner.className = 'ma-i ' + (b.alloc ? (b.size === 1 ? 'mini' : 'alloc') : 'free') + (ui.ext === b ? ' ext' : '');
+    inner.querySelector('.ma-t').textContent = labelFor(b);
+    inner.querySelector('.ma-f').hidden = b.alloc || b.size < 2;
+    e.classList.toggle('alloc-click', b.alloc);
+    e.classList.toggle('is-cand', ui.cands.has(b) && !b.alloc);
+    e.classList.toggle('is-pick', ui.pick === b);
+    e.classList.toggle('is-merge', ui.merge.has(b));
+    e.classList.toggle('is-new', ui.fresh === b);
+    e.setAttribute('aria-label', (b.alloc ? 'Block ' + b.id + ', allocated, ' : 'Free block, ') + (b.size * UB) + ' bytes at ' + addr(b.start) + (b.alloc ? '. Press to free.' : '.'));
+  }
+
+  function buildAxis() {
+    axisEl.textContent = '';
+    for (var u = 0; u < UNITS; u += 8) { var t = el('span', '', addr(u)); t.style.left = (u / UNITS * 100) + '%'; axisEl.appendChild(t); }
+    var last = el('span', '', addr(UNITS)); last.style.left = '100%'; axisEl.appendChild(last);
+    heapEl.setAttribute('aria-label', 'Heap, ' + (UNITS * UB) + ' bytes in ' + UNITS + ' units of 16 bytes');
+  }
+
+  function renderUtil() {
+    var cap = UNITS * UB;
+    var used = blocks.reduce(function (s, b) { return s + (b.alloc ? b.req : 0); }, 0);
+    peak = Math.max(peak, used / cap);
+    meterEl.style.width = (used / cap * 100) + '%';
+    utilEl.textContent = Math.round(used / cap * 100) + '%';
+    utilNoteEl.textContent = used + ' B requested of ' + cap + ' B';
+    peakEl.textContent = Math.round(peak * 100) + '%';
+  }
+  function renderSize() {
+    sizeEl.textContent = (UNITS * UB) + ' B';
+    extNoteEl.textContent = extCount ? 'extended ' + extCount + (extCount === 1 ? ' time' : ' times') + ' (+' + extBytes + ' B)' : 'not extended yet';
+  }
+  function renderTp() {
+    tpEl.innerHTML = (curTp == null ? '&ndash;' : fmt(curTp)) + '<small>Kops</small>';
+    tpMaxEl.textContent = maxTp ? fmt(maxTp) + ' Kops' : '\u2013';
+  }
+  /* work = how much the operation had to do; cheap operations run faster */
+  function setThroughput(work) {
+    curTp = Math.round(BASE_KOPS / (1 + 0.18 * (work - 1)));
+    maxTp = Math.max(maxTp, curTp);
+    renderTp();
+  }
+
+  function paintAll() { blocks.forEach(paint); renderUtil(); }
+
+  /* ---------- operations ---------- */
+  async function doMalloc(id, bytes, g) {
+    var w = async function (ms) { await sleep(ms / speed); if (g !== gen) throw ABORT; };
+    var need = unitsFor(bytes), total = need * UB, op = 'malloc(' + bytes + ')';
+    clearUI();
+    setOp(op, total + ' B block: ' + bytes + ' B payload plus an 8 B header, rounded up to 16 B.' + (need === 1 ? ' That is a mini-block.' : ''));
+    paintAll();
+    await w(900);
+
+    var free = blocks.filter(function (b) { return !b.alloc; });
+    var fits = free.filter(function (b) { return b.size >= need; });
+    var work = Math.max(1, free.length);
+    ui.cands = new Set(free);
+    setOp(op, 'Scan the free blocks for the smallest one that is big enough (best fit).');
+    paintAll();
+    await w(900);
+
+    if (!fits.length) {
+      var tail = blocks[blocks.length - 1], tailFree = (tail && !tail.alloc) ? tail.size : 0;
+      var E = Math.ceil(Math.max(CHUNK, need - tailFree) / CHUNK) * CHUNK;   /* whole 128 B chunks */
+      if (UNITS + E > MAX_UNITS) {
+        clearUI(); paintAll();
+        setOp(op, 'No free block fits and the heap cannot grow any further: out of memory.');
+        setThroughput(work + 2);
+        await w(1200);
+        return;
+      }
+      clearUI(); paintAll();
+      setOp(op, 'Nothing is big enough. Extend the heap by ' + (E * UB) + ' B to get more memory.');
+      await w(1100);
+
+      var before = UNITS * UB;
+      UNITS += E; extCount++; extBytes += E * UB;
+      var nb = mk(UNITS - E, E, false);
+      nb.el.classList.add('is-enter');
+      blocks.push(nb);
+      ui.ext = nb;
+      paintAll(); buildAxis(); renderSize();
+      void nb.el.offsetWidth; nb.el.classList.remove('is-enter');
+      sizeCard.classList.remove('flash'); void sizeCard.offsetWidth; sizeCard.classList.add('flash');
+      setOp(op, 'The heap grew from ' + before + ' B to ' + (UNITS * UB) + ' B. The new memory starts out as one free block.');
+      await w(1500);
+
+      if (tailFree) {
+        ui.merge = new Set([tail, nb]); ui.ext = null;
+        setOp(op, 'The block just before it is free, so the two merge.');
+        paintAll();
+        await w(1000);
+        tail.size += nb.size;
+        blocks.splice(blocks.indexOf(nb), 1);
+        nb.el.classList.add('is-gone'); setTimeout(function () { nb.el.remove(); }, 700);
+        ui.merge = new Set();
+        paintAll();
+        await w(800);
+      } else {
+        ui.ext = null; paintAll();
+      }
+      work += 2;
+      free = blocks.filter(function (b) { return !b.alloc; });
+      fits = free.filter(function (b) { return b.size >= need; });
+      ui.cands = new Set(free);
+      paintAll();
+    }
+
+    var chosen = fits.reduce(function (m, b) { return b.size < m.size ? b : m; });
+    ui.cands = new Set(fits); ui.pick = chosen;
+    setOp(op, 'Best fit: ' + (chosen.size * UB) + ' B at ' + addr(chosen.start) + '.');
+    paintAll();
+    await w(1000);
+
+    var rem = chosen.size - need, r = null;
+    if (rem > 0) {
+      r = mk(chosen.start + need, rem, false);
+      r.el.classList.add('is-enter');
+      blocks.splice(blocks.indexOf(chosen) + 1, 0, r);
+    }
+    chosen.size = need; chosen.alloc = true; chosen.id = id; chosen.req = bytes;
+    clearUI(); ui.fresh = chosen;
+    paintAll();
+    if (r) { void r.el.offsetWidth; r.el.classList.remove('is-enter'); }
+    setThroughput(work);
+    setOp(op, rem > 0
+      ? 'Split: ' + total + ' B goes to ' + id + ' and the ' + (rem * UB) + ' B remainder stays free.'
+      : 'Exact fit: ' + id + ' takes the whole block, no split.');
+    await w(1100);
+    ui.fresh = null; paintAll();
+  }
+
+  async function doFree(id, g) {
+    var w = async function (ms) { await sleep(ms / speed); if (g !== gen) throw ABORT; };
+    var b = blocks.filter(function (x) { return x.alloc && x.id === id; })[0];
+    if (!b) return;
+    var op = 'free(' + id + ')';
+    clearUI();
+    setOp(op, 'Clear the allocated bit at ' + addr(b.start) + ', then check both neighbors using their boundary tags.');
+    b.alloc = false; b.req = 0;
+    paintAll();
+    await w(1000);
+
+    var i = blocks.indexOf(b), prev = blocks[i - 1], next = blocks[i + 1];
+    var lf = !!prev && !prev.alloc, rf = !!next && !next.alloc;
+    setThroughput(1 + 0.6 * ((lf ? 1 : 0) + (rf ? 1 : 0)));
+    if (!lf && !rf) {
+      ui.fresh = b; paintAll();
+      setOp(op, 'Both neighbors are allocated, so there is nothing to merge.');
+      await w(1300);
+      ui.fresh = null; paintAll();
+      return;
+    }
+    ui.merge = new Set([b].concat(lf ? [prev] : [], rf ? [next] : []));
+    setOp(op, lf && rf ? 'Both neighbors are free: merge all three into one block.'
+      : rf ? 'The right neighbor is free: merge into one bigger block.'
+      : 'The left neighbor is free: merge into one bigger block.');
+    paintAll();
+    await w(1000);
+
+    var keep = lf ? prev : b, last = rf ? next : b;
+    var gone = Array.from(ui.merge).filter(function (x) { return x !== keep; });
+    keep.size = last.start + last.size - keep.start;
+    blocks = blocks.filter(function (x) { return gone.indexOf(x) < 0; });
+    gone.forEach(function (x) { x.el.classList.add('is-gone'); setTimeout(function () { x.el.remove(); }, 600); });
+    clearUI(); ui.fresh = keep;
+    paintAll();
+    setOp(op, 'Merged into one ' + (keep.size * UB) + ' B free block.');
+    await w(1300);
+    ui.fresh = null; paintAll();
+  }
+
+  /* end of the demo loop: start over with a fresh, smaller heap */
+  async function doRestart(g) {
+    var w = async function (ms) { await sleep(ms / speed); if (g !== gen) throw ABORT; };
+    setOp('restart', 'Everything is free. Start over with a fresh ' + (INIT * UB) + ' B heap.');
+    await w(1400);
+    freshHeap();
+    await w(900);
+  }
+
+  function freshHeap() {
+    heapEl.querySelectorAll('.ma-b').forEach(function (n) { n.remove(); });
+    UNITS = INIT;
+    blocks = [mk(0, UNITS, false)];
+    clearUI();
+    paintAll(); buildAxis(); renderSize();
+  }
+
+  function runOp(op) {
+    var g = gen;
+    if (op[0] === 'malloc') return doMalloc(op[1], op[2], g);
+    if (op[0] === 'free') return doFree(op[1], g);
+    return doRestart(g);
+  }
+
+  /* ---------- driver and controls ---------- */
+  async function drive() {
+    if (driving) return;
+    driving = true;
+    try {
+      while (playing) {
+        await whenVisible();
+        if (!playing) break;
+        var g0 = gen, op = SCRIPT[pc];
+        pc = (pc + 1) % SCRIPT.length;
+        await enqueue(function () { return runOp(op); });
+        if (g0 !== gen) continue;
+        await sleep(700 / speed);
+      }
+    } finally { driving = false; }
+  }
+
+  function syncButtons() {
+    playBtn.textContent = playing ? 'Pause' : 'Play';
+    playBtn.classList.toggle('primary', playing);
+    stepBtn.disabled = playing;
+  }
+  function setPlaying(v) { playing = v; syncButtons(); if (v) drive(); }
+
+  function reset() {
+    gen++;
+    pc = 0; peak = 0; curTp = null; maxTp = 0; extCount = 0; extBytes = 0;
+    freshHeap(); renderTp();
+    setOp('heap', 'Empty heap: one ' + (INIT * UB) + ' B free block.');
+    if (playing) drive();
+  }
+
+  function manualFree(id) { setPlaying(false); var g = gen; enqueue(function () { return doFree(id, g); }); }
+  function manualMalloc(bytes) {
+    setPlaying(false);
+    var used = blocks.filter(function (b) { return b.alloc; }).map(function (b) { return b.id; });
+    var letters = 'abcdefghijklmnopqrstuvwxyz', id = '?';
+    for (var i = 0; i < letters.length; i++) if (used.indexOf(letters[i]) < 0) { id = letters[i]; break; }
+    var g = gen;
+    enqueue(function () { return doMalloc(id, bytes, g); });
+  }
+
+  playBtn.addEventListener('click', function () { setPlaying(!playing); });
+  stepBtn.addEventListener('click', function () {
+    if (playing) return;
+    var op = SCRIPT[pc]; pc = (pc + 1) % SCRIPT.length;
+    enqueue(function () { return runOp(op); });
+  });
+  resetBtn.addEventListener('click', reset);
+  speedSel.addEventListener('change', function () { speed = parseFloat(speedSel.value) || 1; });
+  mallocBtn.addEventListener('click', function () { manualMalloc(parseInt(sizeSel.value, 10)); });
+
+  /* pause work while the animation is off screen or the tab is hidden */
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) { visible = entries[0].isIntersecting; flushVis(); }, { threshold: 0.15 }).observe($('#ma'));
+  }
+  document.addEventListener('visibilitychange', flushVis);
+
+  freshHeap();
+  renderTp();
+  syncButtons();
+  if (reduced) setOp('heap', 'Animation is paused because your system prefers reduced motion. Press Play or Step.');
+  else drive();
+})();
+</script>
+</body>
+</html>

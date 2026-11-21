@@ -98,3 +98,7 @@ main > section > h2 { font-size: 1.5rem; text-transform: none; letter-spacing: -
   main > section { scroll-margin-top: 110px; }
   main > section:first-child { scroll-margin-top: 200px; }
 }
+
+/* embedded project demo */
+.demo { margin: 4px 0 12px; }
+.demo-frame { display: block; width: 100%; height: 720px; border: 0; margin-top: 12px; background: transparent; color-scheme: normal; }

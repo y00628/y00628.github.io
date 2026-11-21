@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Yosen Lin</title>
 <meta name="description" content="Yosen Lin: MS ECE at CMU. GPU performance, parallel computing, LLM inference and systems software.">
-<link rel="stylesheet" href="style.css?v=9">
+<link rel="stylesheet" href="style.css?v=11">
 </head>
 <body>
 <div class="layout">
@@ -158,6 +158,10 @@
         <h3>Dynamic Memory Allocator</h3>
         <p>A from-scratch 64-bit <code>malloc</code>/<code>free</code> in C, tuned for memory utilization and throughput.</p>
         <ul class="tags"><li>C</li><li>GDB</li><li>Memory Management</li></ul>
+        <details class="demo" open>
+          <summary>Interactive demo</summary>
+          <iframe class="demo-frame" src="allocator-demo.html" title="Interactive malloc and free animation" loading="lazy"></iframe>
+        </details>
         <details>
           <summary>Details</summary>
           <ul>
@@ -313,6 +317,20 @@
     ev.preventDefault();
     window.scrollTo({ top: 0, behavior: 'smooth' });
     setActive('about');
+  });
+})();
+</script>
+<script>
+(function () {
+  document.querySelectorAll('iframe.demo-frame').forEach(function (f) {
+    function fit() {
+      try { var d = f.contentDocument; if (d && d.body) f.style.height = Math.ceil(d.body.getBoundingClientRect().height) + 'px'; } catch (e) {}
+    }
+    f.addEventListener('load', function () {
+      fit();
+      try { new ResizeObserver(fit).observe(f.contentDocument.body); } catch (e) {}
+    });
+    window.addEventListener('resize', fit);
   });
 })();
 </script>
