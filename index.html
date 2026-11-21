@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Yosen Lin</title>
 <meta name="description" content="Yosen Lin: MS ECE at CMU. GPU performance, parallel computing, LLM inference and systems software.">
-<link rel="stylesheet" href="style.css?v=13">
+<link rel="stylesheet" href="style.css?v=14">
 </head>
 <body>
 <div class="layout">
@@ -130,7 +130,7 @@
           <ul class="tags"><li>C++</li><li>Operator Fusion</li><li>Graph Scheduling</li><li>DNN Dataflow</li></ul>
         </div>
         <figure class="card-fig">
-          <img src="dag-scheduler-figure.jpg" alt="Operator graph where a matrix-multiply node and the pointwise node after it are grouped into one fused block that keeps its intermediate result in fast memory" width="900" height="438" loading="lazy">
+          <img src="dag-scheduler-figure-hq.jpg" alt="Operator graph where a matrix-multiply node and the pointwise node after it are grouped into one fused block that keeps its intermediate result in fast memory" width="868" height="845" loading="lazy">
         </figure>
         </div>
         <details>
@@ -141,7 +141,7 @@
             <li>Designed a retain-aware DP that jointly chooses fusion boundaries and which tensors stay resident, contributing ~25% latency reduction on memory-bound benchmarks within a combined 35.8% end-to-end improvement.</li>
           </ul>
         </details>
-        <a href="dag-scheduler-poster.pdf">Poster (PDF) →</a> · <a href="https://github.com/y00628/mlsys-dag-scheduler">Source →</a>
+        <a href="dag-scheduler-report.pdf">Report (PDF) →</a> · <a href="dag-scheduler-poster.pdf">Poster (PDF) →</a> · <a href="https://github.com/y00628/mlsys-dag-scheduler">Source →</a>
       </article>
 
       <article class="card">
