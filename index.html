@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Yosen Lin</title>
 <meta name="description" content="Yosen Lin: MS ECE at CMU. GPU performance, parallel computing, LLM inference and systems software.">
-<link rel="stylesheet" href="style.css?v=11">
+<link rel="stylesheet" href="style.css?v=12">
 </head>
 <body>
 <div class="layout">
@@ -154,10 +154,25 @@
       </article>
 
       <article class="card">
+        <div class="card-top">
+        <div class="card-main">
         <div class="date">Oct 2025 – Nov 2025 · <span class="status done">Completed</span></div>
-        <h3>Dynamic Memory Allocator</h3>
-        <p>A from-scratch 64-bit <code>malloc</code>/<code>free</code> in C, tuned for memory utilization and throughput.</p>
-        <ul class="tags"><li>C</li><li>GDB</li><li>Memory Management</li></ul>
+          <h3>Dynamic Memory Allocator</h3>
+          <p>A from-scratch 64-bit <code>malloc</code>/<code>free</code> in C, tuned for memory utilization and throughput.</p>
+          <ul class="tags"><li>C</li><li>GDB</li><li>Memory Management</li></ul>
+        </div>
+        <figure class="card-fig">
+          <svg viewBox="0 0 320 170" role="img" aria-label="Illustration of a 512-byte heap: allocated blocks A, C, D and F, two small mini-blocks, hatched free blocks, and a teal block of newly added heap memory at the end.">
+            <defs><pattern id="ma-hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect class="hp" width="8" height="8"/><line class="hl" x1="0" y1="0" x2="0" y2="8"/></pattern></defs>
+            <text class="lb" x="8" y="24">heap</text>
+            <text class="te" x="288.2" y="24" text-anchor="middle">+128 B</text>
+            <rect class="a" x="8.8" y="34" width="27.0" height="60" rx="4"/><rect class="hd" x="8.8" y="34" width="3" height="60" rx="1.5"/><text class="t" x="22.2" y="68.0" text-anchor="middle">A</text><rect class="m" x="37.2" y="34" width="8.0" height="60" rx="4"/><rect class="hd" x="37.2" y="34" width="3" height="60" rx="1.5"/><rect class="a" x="46.8" y="34" width="65.0" height="60" rx="4"/><rect class="hd" x="46.8" y="34" width="3" height="60" rx="1.5"/><text class="t" x="79.2" y="68.0" text-anchor="middle">C</text><rect class="f" x="113.2" y="34" width="36.5" height="60" rx="4"/><rect class="a" x="151.2" y="34" width="17.5" height="60" rx="4"/><rect class="hd" x="151.2" y="34" width="3" height="60" rx="1.5"/><text class="t" x="160.0" y="68.0" text-anchor="middle">D</text><rect class="m" x="170.2" y="34" width="8.0" height="60" rx="4"/><rect class="hd" x="170.2" y="34" width="3" height="60" rx="1.5"/><rect class="f" x="179.8" y="34" width="46.0" height="60" rx="4"/><rect class="a" x="227.2" y="34" width="36.5" height="60" rx="4"/><rect class="hd" x="227.2" y="34" width="3" height="60" rx="1.5"/><text class="t" x="245.5" y="68.0" text-anchor="middle">F</text><rect class="e" x="265.2" y="34" width="46.0" height="60" rx="4"/><text class="te" x="288.2" y="68.0" text-anchor="middle">new</text>
+            <text class="tk" x="8.0" y="110" text-anchor="start">0x000</text><text class="tk" x="84.0" y="110" text-anchor="middle">0x080</text><text class="tk" x="160.0" y="110" text-anchor="middle">0x100</text><text class="tk" x="236.0" y="110" text-anchor="middle">0x180</text><text class="tk" x="312.0" y="110" text-anchor="end">0x200</text>
+            <text class="lb" x="8" y="140">heap in use</text><text class="lb" x="312" y="140" text-anchor="end">62%</text>
+            <rect class="tr" x="8" y="148" width="304" height="8" rx="4"/><rect class="fl" x="8" y="148" width="188" height="8" rx="4"/>
+          </svg>
+        </figure>
+        </div>
         <details class="demo" open>
           <summary>Interactive demo</summary>
           <iframe class="demo-frame" src="allocator-demo.html" title="Interactive malloc and free animation" loading="lazy"></iframe>
