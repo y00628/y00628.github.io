@@ -226,9 +226,9 @@ html.embedded .ma-page { max-width: none; }
     ['malloc', 'E', 8], ['malloc', 'F', 56],
     ['free', 'B'], ['free', 'D'], ['free', 'C'],
     ['malloc', 'G', 72], ['malloc', 'H', 8],
-    ['malloc', 'X', 160],
+    ['malloc', 'X', 'big'],
     ['free', 'A'], ['free', 'X'], ['free', 'F'], ['free', 'E'], ['free', 'G'], ['free', 'H'],
-    ['restart']
+    ['recycle']
   ];
 
   var $ = function (s) { return document.querySelector(s); };
@@ -317,7 +317,7 @@ html.embedded .ma-page { max-width: none; }
   }
   function renderSize() {
     sizeEl.textContent = (UNITS * UB) + ' B';
-    extNoteEl.textContent = extCount ? 'extended ' + extCount + (extCount === 1 ? ' time' : ' times') + ' (+' + extBytes + ' B)' : 'not extended yet';
+    extNoteEl.textContent = extCount ? 'extended ' + extCount + (extCount === 1 ? ' time' : ' times') + ' (+' + extBytes + ' B). Never shrinks.' : 'grows only when nothing fits';
   }
   function renderTp() {
     tpEl.innerHTML = (curTp == null ? '&ndash;' : fmt(curTp)) + '<small>Kops</small>';
@@ -333,8 +333,18 @@ html.embedded .ma-page { max-width: none; }
   function paintAll() { blocks.forEach(paint); renderUtil(); }
 
   /* ---------- operations ---------- */
+  /* a request one unit larger than any free block, so the heap has to grow (until the demo cap) */
+  function bigRequest() {
+    var free = blocks.filter(function (b) { return !b.alloc; });
+    var largest = free.reduce(function (m, b) { return Math.max(m, b.size); }, 0);
+    var need = largest + 1, tail = blocks[blocks.length - 1], tailFree = (tail && !tail.alloc) ? tail.size : 0;
+    var E = Math.ceil(Math.max(CHUNK, need - tailFree) / CHUNK) * CHUNK;
+    return UNITS + E <= MAX_UNITS ? need * UB - 8 : 24;
+  }
+
   async function doMalloc(id, bytes, g) {
     var w = async function (ms) { await sleep(ms / speed); if (g !== gen) throw ABORT; };
+    if (bytes === 'big') bytes = bigRequest();
     var need = unitsFor(bytes), total = need * UB, op = 'malloc(' + bytes + ')';
     clearUI();
     setOp(op, total + ' B block: ' + bytes + ' B payload plus an 8 B header, rounded up to 16 B.' + (need === 1 ? ' That is a mini-block.' : ''));
@@ -460,13 +470,11 @@ html.embedded .ma-page { max-width: none; }
     ui.fresh = null; paintAll();
   }
 
-  /* end of the demo loop: start over with a fresh, smaller heap */
-  async function doRestart(g) {
+  /* end of the demo loop: the heap keeps its size, freed memory is reused next time around */
+  async function doRecycle(g) {
     var w = async function (ms) { await sleep(ms / speed); if (g !== gen) throw ABORT; };
-    setOp('restart', 'Everything is free. Start over with a fresh ' + (INIT * UB) + ' B heap.');
-    await w(1400);
-    freshHeap();
-    await w(900);
+    setOp('recycle', 'Everything is free again. The heap keeps its ' + (UNITS * UB) + ' B so the memory can be reused: the heap only grows.');
+    await w(2600);
   }
 
   function freshHeap() {
@@ -481,7 +489,7 @@ html.embedded .ma-page { max-width: none; }
     var g = gen;
     if (op[0] === 'malloc') return doMalloc(op[1], op[2], g);
     if (op[0] === 'free') return doFree(op[1], g);
-    return doRestart(g);
+    return doRecycle(g);
   }
 
   /* ---------- driver and controls ---------- */
