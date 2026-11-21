@@ -117,3 +117,12 @@ main > section > h2 { font-size: 1.5rem; text-transform: none; letter-spacing: -
 .card-fig .tk, .card-fig .lb { fill: var(--muted); font: 9px ui-monospace, Menlo, monospace; }
 .card-fig .tr { fill: var(--line); } .card-fig .fl { fill: var(--accent); }
 @media (max-width: 640px) { .card-top { flex-direction: column-reverse; } .card-fig { width: 100%; max-width: 340px; } }
+
+/* projects as flat rows with a thumbnail on the right */
+.projects { gap: 0; }
+.projects .card { background: none; border: 0; border-radius: 0; padding: 28px 0; border-top: 1px solid var(--line); }
+.projects .card:first-child { border-top: 0; padding-top: 0; }
+.projects .card h3 { margin: 0 0 2px; font-size: 1.15rem; }
+.projects .card .date { font-style: italic; margin: 0 0 10px; }
+.card-fig img { display: block; width: 100%; height: auto; border-radius: 6px; }
+.card-fig:has(img) { padding: 6px; background: var(--card); }

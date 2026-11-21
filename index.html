@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Yosen Lin</title>
 <meta name="description" content="Yosen Lin: MS ECE at CMU. GPU performance, parallel computing, LLM inference and systems software.">
-<link rel="stylesheet" href="style.css?v=12">
+<link rel="stylesheet" href="style.css?v=13">
 </head>
 <body>
 <div class="layout">
@@ -107,25 +107,32 @@
         <div class="projects">
 
       <article class="card">
-        <div class="date">Nov 2026 – Present · <span class="status wip">In progress</span></div>
         <h3>Scalable DLRM Inference across GPUs and CPU Memory</h3>
+        <div class="date">Nov 2026 – Present · <span class="status wip">In progress</span></div>
         <p>Recommendation models have embedding tables too big for a single GPU. This project spreads inference across multiple GPUs and host CPU memory, so models that would normally run out of memory can still be served at scale.</p>
         <ul class="tags"><li>CUDA</li><li>C++</li><li>Parallel Programming</li></ul>
         <a href="https://y00628.github.io/dlrm-hetero-inference/">Website →</a> · <a href="https://github.com/y00628/dlrm-hetero-inference">Source →</a>
       </article>
 
       <article class="card">
-        <div class="date">Oct 2026 – Present · <span class="status wip">In progress</span></div>
         <h3>FPGA DRAM Bandwidth Study on the Ultra96-V2</h3>
+        <div class="date">Oct 2026 – Present · <span class="status wip">In progress</span></div>
         <p>LLM decoding is limited by memory bandwidth, not compute. This project pushes an Ultra96-V2 FPGA toward its DRAM limit on a large fully connected layer and measures what actually moves the needle: memory access settings, clock speed, port configuration and weight precision.</p>
         <ul class="tags"><li>Vitis HLS</li><li>C++</li><li>FPGA</li></ul>
       </article>
 
       <article class="card">
-        <div class="date">Feb 2026 – May 2026 · <span class="status done">Completed</span></div>
+        <div class="card-top">
+        <div class="card-main">
         <h3>DAG Operator Fusion Scheduler</h3>
-        <p>In deep neural networks, shuffling data between fast memory and DRAM often costs more than the math itself. This scheduler decides which operators to fuse and which tensors to keep close, slashing data movement across large DNN graphs.</p>
-        <ul class="tags"><li>C++</li><li>Operator Fusion</li><li>Graph Scheduling</li><li>DNN Dataflow</li></ul>
+          <div class="date">Feb 2026 – May 2026 · <span class="status done">Completed</span></div>
+          <p>In deep neural networks, shuffling data between fast memory and DRAM often costs more than the math itself. This scheduler decides which operators to fuse and which tensors to keep close, slashing data movement across large DNN graphs.</p>
+          <ul class="tags"><li>C++</li><li>Operator Fusion</li><li>Graph Scheduling</li><li>DNN Dataflow</li></ul>
+        </div>
+        <figure class="card-fig">
+          <img src="dag-scheduler-figure.jpg" alt="Operator graph where a matrix-multiply node and the pointwise node after it are grouped into one fused block that keeps its intermediate result in fast memory" width="900" height="438" loading="lazy">
+        </figure>
+        </div>
         <details>
           <summary>Details</summary>
           <ul>
@@ -138,8 +145,8 @@
       </article>
 
       <article class="card">
-        <div class="date">Jan 2026 – Apr 2026 · <span class="status done">Completed</span></div>
         <h3>Power-Efficient RV32I Pipelined Processor</h3>
+        <div class="date">Jan 2026 – Apr 2026 · <span class="status done">Completed</span></div>
         <p>A 7-stage pipelined RISC-V CPU in SystemVerilog, optimized for both performance and performance-per-watt.</p>
         <ul class="tags"><li>SystemVerilog</li><li>RTL Design</li><li>C</li></ul>
         <details>
@@ -156,8 +163,8 @@
       <article class="card">
         <div class="card-top">
         <div class="card-main">
-        <div class="date">Oct 2025 – Nov 2025 · <span class="status done">Completed</span></div>
-          <h3>Dynamic Memory Allocator</h3>
+        <h3>Dynamic Memory Allocator</h3>
+          <div class="date">Oct 2025 – Nov 2025 · <span class="status done">Completed</span></div>
           <p>A from-scratch 64-bit <code>malloc</code>/<code>free</code> in C, tuned for memory utilization and throughput.</p>
           <ul class="tags"><li>C</li><li>GDB</li><li>Memory Management</li></ul>
         </div>
