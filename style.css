@@ -1,8 +1,8 @@
-:root { --ext:#0f8b7d; --bg:#fafaf7; --side:#fafaf7; --fg:#1c1c1a; --muted:#6a6a64; --line:#e4e3dc;
+:root { --pw:#7c5cd6; --ext:#0f8b7d; --bg:#fafaf7; --side:#fafaf7; --fg:#1c1c1a; --muted:#6a6a64; --line:#e4e3dc;
         --card:#ffffff; --accent:#2f5de4; --accent-soft:#eef1fc; }
 @media (prefers-color-scheme: dark) {
   :root { --bg:#131413; --side:#131413; --fg:#ecebe6; --muted:#9a9a92; --line:#2a2b29;
-          --card:#1b1c1b; --accent:#7d9bff; --accent-soft:#20263d; --ext:#3dd6c3; }
+          --card:#1b1c1b; --accent:#7d9bff; --accent-soft:#20263d; --ext:#3dd6c3; --pw:#b6a2ff; }
 }
 * { box-sizing:border-box; }
 html { scroll-behavior:smooth; }
@@ -126,3 +126,18 @@ main > section > h2 { font-size: 1.5rem; text-transform: none; letter-spacing: -
 .projects .card .date { font-style: italic; margin: 0 0 10px; }
 .card-fig img { display: block; width: 100%; height: auto; border-radius: 6px; }
 .card-fig:has(img) { padding: 6px; background: var(--card); }
+
+/* DAG scheduler figure (drawn, theme-aware) */
+.card-fig.dag { padding: 10px 8px 8px; }
+.card-fig.dag figcaption { margin-top: 6px; text-align: center; font-size: 12px; color: var(--muted); }
+.dag .dn { stroke-width: 1.5; }
+.dag .dn.mm { fill: color-mix(in srgb, var(--accent) 18%, var(--card)); stroke: color-mix(in srgb, var(--accent) 70%, var(--card)); }
+.dag .dn.pw { fill: color-mix(in srgb, var(--pw) 20%, var(--card)); stroke: color-mix(in srgb, var(--pw) 70%, var(--card)); }
+.dag .dn.in { fill: var(--line); stroke: var(--muted); }
+.dag .dl { font: 600 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui, sans-serif; }
+.dag .dl.mmt { fill: var(--accent); } .dag .dl.pwt { fill: var(--pw); } .dag .dl.int { fill: var(--fg); }
+.dag .de { fill: none; stroke: var(--muted); stroke-width: 1.3; opacity: .7; }
+.dag .ah { fill: var(--muted); opacity: .8; }
+.dag .dg { fill: color-mix(in srgb, var(--ext) 13%, var(--card)); stroke: var(--ext); stroke-width: 1.5; stroke-dasharray: 5 4; }
+.dag .dp { fill: color-mix(in srgb, var(--ext) 16%, var(--card)); stroke: var(--ext); stroke-width: 1.2; }
+.dag .dpt { fill: var(--ext); font: 600 10.5px -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui, sans-serif; }
