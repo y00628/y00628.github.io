@@ -145,12 +145,10 @@ main > section > h2 { font-size: 1.5rem; text-transform: none; letter-spacing: -
 .dag .lb2 { fill: var(--muted); font: 600 10px -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui, sans-serif; }
 .dag .dl.pwt { fill: var(--pw); }
 
-/* architecture diagram */
-.arch-fig { margin: 12px 0 0; padding: 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--card); }
-.arch-fig svg { display: block; width: 100%; height: auto; }
-.arch-fig figcaption { margin-top: 8px; font-size: 12.5px; color: var(--muted); display: flex; align-items: center; gap: 8px; }
-.crit-key { display: inline-block; width: 22px; height: 0; border-top: 2.5px solid var(--warn); border-radius: 2px; }
-.dag .stg { fill: color-mix(in srgb, var(--accent) 5%, var(--card)); stroke: var(--line); stroke-width: 1; }
-.dag .sl { fill: var(--muted); font: 700 9px -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui, sans-serif; letter-spacing: .08em; }
-.dag .crit { fill: none; stroke: var(--warn); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+/* datapath thumbnail */
+.dag .pbar { fill: color-mix(in srgb, var(--accent) 14%, var(--card)); stroke: color-mix(in srgb, var(--accent) 55%, var(--card)); stroke-width: 1.2; }
+.dag .de.th { stroke-width: 2; opacity: .85; }
+.dag .sl2 { fill: var(--muted); font: 700 8px -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui, sans-serif; letter-spacing: .04em; }
+.dag .lb3 { fill: var(--warn); font: 700 8px -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui, sans-serif; }
+.dag .crit { fill: none; stroke: var(--warn); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .dag .ahw { fill: var(--warn); }
