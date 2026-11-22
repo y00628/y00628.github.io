@@ -1,8 +1,8 @@
-:root { --pw:#7c5cd6; --ext:#0f8b7d; --bg:#fafaf7; --side:#fafaf7; --fg:#1c1c1a; --muted:#6a6a64; --line:#e4e3dc;
+:root { --warn:#d98a00; --pw:#7c5cd6; --ext:#0f8b7d; --bg:#fafaf7; --side:#fafaf7; --fg:#1c1c1a; --muted:#6a6a64; --line:#e4e3dc;
         --card:#ffffff; --accent:#2f5de4; --accent-soft:#eef1fc; }
 @media (prefers-color-scheme: dark) {
   :root { --bg:#131413; --side:#131413; --fg:#ecebe6; --muted:#9a9a92; --line:#2a2b29;
-          --card:#1b1c1b; --accent:#7d9bff; --accent-soft:#20263d; --ext:#3dd6c3; --pw:#b6a2ff; }
+          --card:#1b1c1b; --accent:#7d9bff; --accent-soft:#20263d; --ext:#3dd6c3; --pw:#b6a2ff; --warn:#f0b429; }
 }
 * { box-sizing:border-box; }
 html { scroll-behavior:smooth; }
@@ -144,3 +144,13 @@ main > section > h2 { font-size: 1.5rem; text-transform: none; letter-spacing: -
 
 .dag .lb2 { fill: var(--muted); font: 600 10px -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui, sans-serif; }
 .dag .dl.pwt { fill: var(--pw); }
+
+/* architecture diagram */
+.arch-fig { margin: 12px 0 0; padding: 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--card); }
+.arch-fig svg { display: block; width: 100%; height: auto; }
+.arch-fig figcaption { margin-top: 8px; font-size: 12.5px; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+.crit-key { display: inline-block; width: 22px; height: 0; border-top: 2.5px solid var(--warn); border-radius: 2px; }
+.dag .stg { fill: color-mix(in srgb, var(--accent) 5%, var(--card)); stroke: var(--line); stroke-width: 1; }
+.dag .sl { fill: var(--muted); font: 700 9px -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui, sans-serif; letter-spacing: .08em; }
+.dag .crit { fill: none; stroke: var(--warn); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.dag .ahw { fill: var(--warn); }

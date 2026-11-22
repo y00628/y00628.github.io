@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Yosen Lin</title>
 <meta name="description" content="Yosen Lin: MS ECE at CMU. GPU performance, parallel computing, LLM inference and systems software.">
-<link rel="stylesheet" href="style.css?v=17">
+<link rel="stylesheet" href="style.css?v=18">
 </head>
 <body>
 <div class="layout">
@@ -173,6 +173,26 @@
           <figcaption>GShare at fetch, RAS at decode</figcaption>
         </figure>
         </div>
+        <details class="demo" open>
+          <summary>Architecture</summary>
+          <figure class="arch-fig dag">
+            <svg viewBox="0 0 644 272" role="img" aria-label="Simplified block diagram of the 7-stage RISC-V core. Columns for IF1, IF2, ID, EX, MEM1, MEM2 and WB. Fetch holds the PC and a GShare predictor with a branch target buffer, then an instruction cache. Decode holds the decoder, register file and return address stack. Execute holds the ALU, forwarding logic and branch flush. A write-back data cache spans the two memory stages. Both caches connect through an arbiter to main memory. A branch redirect runs from execute back to fetch. The critical path runs from the ALU through the flush signal to the return address stack.">
+            <defs>
+              <marker id="rv2-ah" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path class="ah" d="M0,0 L8,4 L0,8z"/></marker>
+              <marker id="rv2-ahw" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="5" markerHeight="5" orient="auto"><path class="ahw" d="M0,0 L8,4 L0,8z"/></marker>
+            </defs>
+            <rect class="stg" x="10" y="40" width="84" height="126" rx="10"/><text class="sl" x="52.0" y="54" text-anchor="middle">IF1</text><rect class="stg" x="100" y="40" width="84" height="126" rx="10"/><text class="sl" x="142.0" y="54" text-anchor="middle">IF2</text><rect class="stg" x="190" y="40" width="84" height="126" rx="10"/><text class="sl" x="232.0" y="54" text-anchor="middle">ID</text><rect class="stg" x="280" y="40" width="84" height="126" rx="10"/><text class="sl" x="322.0" y="54" text-anchor="middle">EX</text><rect class="stg" x="370" y="40" width="84" height="126" rx="10"/><text class="sl" x="412.0" y="54" text-anchor="middle">MEM1</text><rect class="stg" x="460" y="40" width="84" height="126" rx="10"/><text class="sl" x="502.0" y="54" text-anchor="middle">MEM2</text><rect class="stg" x="550" y="40" width="84" height="126" rx="10"/><text class="sl" x="592.0" y="54" text-anchor="middle">WB</text><rect class="dn mm" x="15" y="66" width="74" height="24" rx="7"/><text class="dl mmt" style="font-size:9.5px" x="52.0" y="78.5" text-anchor="middle" dominant-baseline="central">PC</text><rect class="dn pw" x="15" y="96" width="74" height="24" rx="7"/><text class="dl pwt" style="font-size:9.5px" x="52.0" y="108.5" text-anchor="middle" dominant-baseline="central">GShare + BTB</text><rect class="dp" x="105" y="66" width="74" height="24" rx="7"/><text class="dpt" style="font-size:9.5px" x="142.0" y="78.5" text-anchor="middle" dominant-baseline="central">I-cache</text><rect class="dn mm" x="195" y="66" width="74" height="24" rx="7"/><text class="dl mmt" style="font-size:9.5px" x="232.0" y="78.5" text-anchor="middle" dominant-baseline="central">Decode</text><rect class="dn mm" x="195" y="96" width="74" height="24" rx="7"/><text class="dl mmt" style="font-size:9.5px" x="232.0" y="108.5" text-anchor="middle" dominant-baseline="central">Reg file</text><rect class="dn pw" x="195" y="126" width="74" height="24" rx="7"/><text class="dl pwt" style="font-size:9.5px" x="232.0" y="138.5" text-anchor="middle" dominant-baseline="central">RAS</text><rect class="dn mm" x="285" y="66" width="74" height="24" rx="7"/><text class="dl mmt" style="font-size:9.5px" x="322.0" y="78.5" text-anchor="middle" dominant-baseline="central">ALU</text><rect class="dn mm" x="285" y="96" width="74" height="24" rx="7"/><text class="dl mmt" style="font-size:9.5px" x="322.0" y="108.5" text-anchor="middle" dominant-baseline="central">Forwarding</text><rect class="dn mm" x="285" y="126" width="74" height="24" rx="7"/><text class="dl mmt" style="font-size:9.5px" x="322.0" y="138.5" text-anchor="middle" dominant-baseline="central">Branch flush</text><rect class="dp" x="375" y="66" width="164" height="48" rx="8"/><text class="dpt" style="font-size:10px" x="457.0" y="84" text-anchor="middle" dominant-baseline="central">D-cache</text><text class="dpt" style="font-size:9px;font-weight:500" x="457.0" y="99" text-anchor="middle" dominant-baseline="central">write-back</text><rect class="dn mm" x="555" y="66" width="74" height="24" rx="7"/><text class="dl mmt" style="font-size:9.5px" x="592.0" y="78.5" text-anchor="middle" dominant-baseline="central">Write-back</text>
+            <path class="de" d="M89,78 H103" marker-end="url(#rv2-ah)"/><path class="de" d="M179,78 H193" marker-end="url(#rv2-ah)"/><path class="de" d="M269,78 H283" marker-end="url(#rv2-ah)"/><path class="de" d="M359,78 H373" marker-end="url(#rv2-ah)"/><path class="de" d="M539,78 H553" marker-end="url(#rv2-ah)"/>
+            <path class="de" d="M322.0,39 V24 H52.0 V37" marker-end="url(#rv2-ah)"/><text class="lb2" x="187.0" y="17" text-anchor="middle">branch redirect</text>
+            <path class="de" d="M142.0,90 V208 H250"/><path class="de" d="M457.0,114 V208 H410"/>
+<rect class="dn in" x="250" y="196" width="160" height="24" rx="7"/><text class="dl int" style="font-size:9.5px" x="330" y="208.5" text-anchor="middle" dominant-baseline="central">Arbiter</text>
+<path class="de" d="M330,220 V236"/>
+<rect class="dn in" x="270" y="236" width="120" height="26" rx="7"/><text class="dl int" style="font-size:9.5px" x="330" y="249.5" text-anchor="middle" dominant-baseline="central">Main memory</text>
+            <path class="crit" d="M285,82 H277 V138 H272" marker-end="url(#rv2-ahw)"/>
+          </svg>
+            <figcaption><span class="crit-key"></span>Critical path: ALU &rarr; flush &rarr; RAS</figcaption>
+          </figure>
+        </details>
         <details>
           <summary>Details</summary>
           <ul>
