@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Yosen Lin</title>
 <meta name="description" content="Yosen Lin: MS ECE at CMU. GPU performance, parallel computing, LLM inference and systems software.">
-<link rel="stylesheet" href="style.css?v=20">
+<link rel="stylesheet" href="style.css?v=21">
 </head>
 <body>
 <div class="layout">
@@ -107,11 +107,22 @@
         <div class="projects">
 
       <article class="card">
+        <div class="card-top">
+        <div class="card-main">
         <h3>Scalable DLRM Inference across GPUs and CPU Memory</h3>
-        <div class="date">Nov 2026 – Present · <span class="status wip">In progress</span></div>
-        <p>Recommendation models have embedding tables too big for a single GPU. This project spreads inference across multiple GPUs and host CPU memory, so models that would normally run out of memory can still be served at scale.</p>
-        <ul class="tags"><li>CUDA</li><li>C++</li><li>Parallel Programming</li></ul>
-        <a href="https://y00628.github.io/dlrm-hetero-inference/">Website →</a> · <a href="https://github.com/y00628/dlrm-hetero-inference">Source →</a>
+          <div class="date">Nov 2026 – Present · <span class="status wip">In progress</span></div>
+          <p>Recommendation models have embedding tables too big for a single GPU. This project spreads inference across multiple GPUs and host CPU memory, so models that would normally run out of memory can still be served at scale.</p>
+          <ul class="tags"><li>CUDA</li><li>C++</li><li>Parallel Programming</li></ul>
+          <a href="https://y00628.github.io/dlrm-hetero-inference/">Website →</a> · <a href="https://github.com/y00628/dlrm-hetero-inference">Source →</a>
+        </div>
+        <figure class="card-fig dag">
+          <svg viewBox="0 0 320 154" role="img" aria-label="Diagram of recommendation-model inference spread across two GPUs and host memory. The host CPU holds cold embedding tables and sends partial results over PCIe to each GPU. Each GPU holds hot embedding tables, then an all-to-all exchange feeds a data-parallel dot interaction and top MLP that outputs a click probability.">
+            <defs><marker id="dl-ah" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto"><path class="ah" d="M0,0 L8,4 L0,8z"/></marker></defs>
+            <path class="de dash" d="M40,21 H28 V123 H38" marker-end="url(#dl-ah)"/><path class="de dash" d="M28,75 H38" marker-end="url(#dl-ah)"/><text class="lb2" x="1" y="50" style="font-size:8px">PCIe</text><rect class="dn pw" x="40" y="8" width="106" height="26" rx="6"/><text class="dl pwt" style="font-size:8.5px" x="93.0" y="21.5" text-anchor="middle" dominant-baseline="central">Host CPU &middot; cold tables</text><rect class="dp" x="40" y="58" width="72" height="34" rx="6"/><text class="dpt" style="font-size:9px" x="76" y="71" text-anchor="middle" dominant-baseline="central">Embeddings</text><text class="dpt" style="font-size:8px;font-weight:500" x="76" y="83" text-anchor="middle" dominant-baseline="central">hot cache</text><path class="de th" d="M112,75 H138" marker-end="url(#dl-ah)"/><path class="de th" d="M156,75 H176" marker-end="url(#dl-ah)"/><rect class="dn mm" x="178" y="58" width="58" height="34" rx="6"/><text class="dl mmt" style="font-size:9px" x="207.0" y="75.5" text-anchor="middle" dominant-baseline="central">Dot + MLP</text><path class="de th" d="M236,75 H256" marker-end="url(#dl-ah)"/><rect class="dn in" x="258" y="65" width="54" height="20" rx="10"/><text class="dl int" style="font-size:9px" x="285" y="75.5" text-anchor="middle" dominant-baseline="central">CTR</text><rect class="dp" x="40" y="106" width="72" height="34" rx="6"/><text class="dpt" style="font-size:9px" x="76" y="119" text-anchor="middle" dominant-baseline="central">Embeddings</text><text class="dpt" style="font-size:8px;font-weight:500" x="76" y="131" text-anchor="middle" dominant-baseline="central">hot cache</text><path class="de th" d="M112,123 H138" marker-end="url(#dl-ah)"/><path class="de th" d="M156,123 H176" marker-end="url(#dl-ah)"/><rect class="dn mm" x="178" y="106" width="58" height="34" rx="6"/><text class="dl mmt" style="font-size:9px" x="207.0" y="123.5" text-anchor="middle" dominant-baseline="central">Dot + MLP</text><path class="de th" d="M236,123 H256" marker-end="url(#dl-ah)"/><rect class="dn in" x="258" y="113" width="54" height="20" rx="10"/><text class="dl int" style="font-size:9px" x="285" y="123.5" text-anchor="middle" dominant-baseline="central">CTR</text><text class="sl2" x="40" y="55">GPU 0</text><text class="sl2" x="40" y="103">GPU 1</text><rect class="pbar" x="140" y="48" width="16" height="100" rx="3"/><text class="dl mmt" style="font-size:8.5px" transform="translate(148 98) rotate(-90)" text-anchor="middle" dominant-baseline="central">all-to-all</text>
+          </svg>
+          <figcaption>Hybrid model/data parallel</figcaption>
+        </figure>
+        </div>
       </article>
 
       <article class="card">

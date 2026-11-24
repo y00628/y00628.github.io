@@ -152,3 +152,6 @@ main > section > h2 { font-size: 1.5rem; text-transform: none; letter-spacing: -
 .dag .lb3 { fill: var(--warn); font: 700 8px -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui, sans-serif; }
 .dag .crit { fill: none; stroke: var(--warn); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .dag .ahw { fill: var(--warn); }
+
+.dag .de.dash { stroke-dasharray: 4 3; stroke-width: 1.4; opacity: .8; }
+.dag .lb4 { fill: var(--muted); font: 700 8px -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui, sans-serif; letter-spacing: .06em; text-transform: uppercase; }
